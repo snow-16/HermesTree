@@ -9,28 +9,50 @@ using System.Collections.Generic;
 /// </summary>
 public class PlayerCore : MonoBehaviour
 {
-    private Dictionary<PlayerInputType, Action> _inputActions = new();
-    public Dictionary<PlayerInputType, Action> InputActions { get => _inputActions; set => _inputActions = value; }
+    private Dictionary<PlayerKeyBindType, Dictionary<InputType, ActionContainer>> _inputActions = new();
+    public Dictionary<PlayerKeyBindType, Dictionary<InputType, ActionContainer>> InputActions { get => _inputActions; set => _inputActions = value; }
 
-    void Start()
+    void Awake()
     {
         var playerInputMap = InputSystem.actions.FindActionMap("Player");
-        
-        foreach(PlayerInputType actionType in Enum.GetValues(typeof(PlayerInputType)))
-        {
-            _inputActions.Add(actionType, null);
 
-            Observable.EveryUpdate().Where(_ => playerInputMap[actionType.ToString()].IsPressed()).Subscribe(_ =>
+        var actionContainerTemplate = new Dictionary<InputType, ActionContainer>
+        {
+            { InputType.IsPressed, new(action => action.IsPressed()) },
+            { InputType.IsReleaced, new(action => !action.IsPressed()) },
+            { InputType.NowPressed, new(action => action.WasPressedThisFrame()) },
+            { InputType.NowReleaced, new(action => action.WasReleasedThisFrame()) }
+        };
+        
+        foreach(PlayerKeyBindType actionType in Enum.GetValues(typeof(PlayerKeyBindType)))
+        {
+            _inputActions.Add(actionType, actionContainerTemplate);
+
+            foreach(InputType inputType in Enum.GetValues(typeof(InputType)))
             {
-                _inputActions[actionType]?.Invoke();
-            }).AddTo(this);
+                Observable.EveryUpdate().Where(_ => _inputActions[actionType][inputType].actionTrigger(playerInputMap[actionType.ToString()])).Subscribe(_ =>
+                {
+                    _inputActions[actionType][inputType].action?.Invoke();
+                }).AddTo(this);
+            }
         }
 
-        _inputActions[PlayerInputType.MoveRight] += Move;
+        _inputActions[PlayerKeyBindType.MoveRight][InputType.IsPressed].action += Move;
     }
 
     public void Move()
     {
         GetComponent<Rigidbody2D>().AddForce(Vector2.right * 10);
+    }
+
+    public class ActionContainer
+    {
+        public Action action = null;
+        public readonly Func<InputAction, bool> actionTrigger;
+
+        public ActionContainer(Func<InputAction, bool> trigger)
+        {
+            actionTrigger = trigger;
+        }
     }
 }
