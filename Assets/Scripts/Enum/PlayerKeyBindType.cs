@@ -5,4 +5,5 @@ public enum PlayerKeyBindType
 {
     MoveRight,
     MoveLeft,
+    Jump,
 }
