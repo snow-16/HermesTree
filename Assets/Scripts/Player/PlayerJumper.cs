@@ -8,7 +8,7 @@ public class PlayerJumper : MonoBehaviour
     void Start()
     {
         var core = GetComponent<PlayerCore>();
-        core.AddListener(PlayerKeyBindType.Jump, InputType.NowPressed, Jump, action => new(), this);
+        core.AddListener(new InputSystem_Actions().Player.Jump, InputType.NowPressed, Jump, action => new(), this);
     }
 
     /// <summary>

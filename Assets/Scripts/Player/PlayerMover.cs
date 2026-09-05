@@ -5,11 +5,17 @@ using UnityEngine;
 /// </summary>
 public class PlayerMover : MonoBehaviour
 {
+    private PlayerDataBase _playerDataBase;
+
     void Start()
     {
+        var playerAction = new InputSystem_Actions().Player;
+
         var core = GetComponent<PlayerCore>();
-        core.AddListener(PlayerKeyBindType.MoveRight, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
-        core.AddListener(PlayerKeyBindType.MoveLeft, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
+        core.AddListener(playerAction.MoveRight, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
+        core.AddListener(playerAction.MoveLeft, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
+        
+        _playerDataBase = DataManager.ReadData<PlayerDataBase>();
     }
 
     /// <summary>
@@ -18,6 +24,6 @@ public class PlayerMover : MonoBehaviour
     /// <param name="input">入力の値</param>
     public void Move(Vector2 input)
     {
-        GetComponent<Rigidbody2D>().AddForce(Vector2.right * input.x * 10);
+        GetComponent<Rigidbody2D>().AddForce(Vector2.right * input.x * _playerDataBase.Speed);
     }
 }

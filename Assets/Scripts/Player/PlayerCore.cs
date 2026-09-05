@@ -9,14 +9,27 @@ using System.Collections.Generic;
 /// </summary>
 public class PlayerCore : MonoBehaviour
 {
-    private Dictionary<PlayerKeyBindType, Dictionary<InputType, ActionContainer>> _inputActions = new();
-    public Dictionary<PlayerKeyBindType, Dictionary<InputType, ActionContainer>> InputActions { get => _inputActions; set => _inputActions = value; }
+    private Dictionary<string, Dictionary<InputType, ActionContainer>> _inputActions = new();
+    public Dictionary<string, Dictionary<InputType, ActionContainer>> InputActions { get => _inputActions; set => _inputActions = value; }
+
+    private InputSystem_Actions _inputMap;
+
+    void OnEnable()
+    {
+        _inputMap.Enable();
+    }
+
+    void OnDisable()
+    {
+        _inputMap.Disable();
+    }
 
     void Awake()
     {
-        var playerInputMap = InputSystem.actions.FindActionMap("Player");
-        
-        foreach(PlayerKeyBindType actionType in Enum.GetValues(typeof(PlayerKeyBindType)))
+        _inputMap = new InputSystem_Actions();
+        var playerInputMap = _inputMap.Player;
+
+        foreach(var input in playerInputMap.Get())
         {
             var actionContainerTemplate = new Dictionary<InputType, ActionContainer>
             {
@@ -25,15 +38,15 @@ public class PlayerCore : MonoBehaviour
                 { InputType.NowPressed, new(action => action.WasPressedThisFrame()) },
                 { InputType.NowReleaced, new(action => action.WasReleasedThisFrame()) }
             };
-            _inputActions.Add(actionType, actionContainerTemplate);
+            
+            _inputActions.Add(input.name, actionContainerTemplate);
 
             foreach(InputType inputType in Enum.GetValues(typeof(InputType)))
             {
-                var actionContainer = _inputActions[actionType][inputType];
-                var action = playerInputMap[actionType.ToString()];
-                Observable.EveryUpdate().Where(_ => actionContainer.action != null).Where(_ => actionContainer.actionTrigger(action)).Subscribe(_ =>
+                var actionContainer = _inputActions[input.name][inputType];
+                Observable.EveryUpdate().Where(_ => actionContainer.action != null).Where(_ => actionContainer.actionTrigger(input)).Subscribe(_ =>
                 {
-                    actionContainer.action.Invoke(actionContainer.actionOutput(action));
+                    actionContainer.action.Invoke(actionContainer.actionOutput(input));
                 }).AddTo(this);
             }
         }
@@ -46,11 +59,11 @@ public class PlayerCore : MonoBehaviour
     /// <param name="inputType">入力の種類</param>
     /// <param name="inputAction">購読メソッド</param>
     /// <param name="listenObject">メソッドの持ち主</param>
-    public void AddListener(PlayerKeyBindType keyBindType, InputType inputType, Action<Vector2> inputAction, Func<InputAction, Vector2> output, MonoBehaviour listenObject)
+    public void AddListener(InputAction input, InputType inputType, Action<Vector2> inputAction, Func<InputAction, Vector2> output, MonoBehaviour listenObject)
     {
-        _inputActions[keyBindType][inputType].action += inputAction;
-        _inputActions[keyBindType][inputType].SetOutputProcess(output);
-        Observable.EveryUpdate().Where(_ => listenObject == null).Take(1).Subscribe(_ => _inputActions[keyBindType][inputType].action -= inputAction).AddTo(this);
+        _inputActions[input.name][inputType].action += inputAction;
+        _inputActions[input.name][inputType].SetOutputProcess(output);
+        Observable.EveryUpdate().Where(_ => listenObject == null).Take(1).Subscribe(_ => _inputActions[input.name][inputType].action -= inputAction).AddTo(this);
     }
 
     /// <summary>
