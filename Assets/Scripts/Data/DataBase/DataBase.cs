@@ -3,4 +3,4 @@ using UnityEngine;
 /// <summary>
 /// データベースの抽象クラス
 /// </summary>
-public abstract class DataBase : ScriptableObject{}
+public abstract class DataBase : ScriptableObject, IData{}

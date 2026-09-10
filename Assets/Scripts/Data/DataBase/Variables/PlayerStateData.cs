@@ -1,0 +1,4 @@
+public struct PlayerStateData : IData
+{
+    
+}

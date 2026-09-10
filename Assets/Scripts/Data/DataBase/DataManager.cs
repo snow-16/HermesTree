@@ -10,9 +10,9 @@ public class DataManager : MonoBehaviour
     [SerializeField]
     private List<DataBase> _defaultDataBases;
 
-    private static Dictionary<Type, DataBase> _dataBases = new();
+    private static Dictionary<Type, IData> _dataBases = new();
     /// <summary> データベースを保持するディクショナリー </summary>
-    public static Dictionary<Type, DataBase> DataBases => _dataBases;
+    public static Dictionary<Type, IData> DataBases => _dataBases;
 
     void Awake()
     {
@@ -23,11 +23,11 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// データベースを追加する
+    /// データを追加する
     /// </summary>
-    /// <typeparam name="T">データベースの型</typeparam>
-    /// <param name="dataBase">データベースの値</param>
-    public static void AddData<T>(T dataBase) where T : DataBase
+    /// <typeparam name="T">データの型</typeparam>
+    /// <param name="dataBase">データの値</param>
+    public static void AddData<T>(ref T dataBase) where T : IData
     {
         var dataType = dataBase.GetType();
         if(_dataBases.ContainsKey(dataType))
@@ -41,11 +41,21 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// データベースを読み取る
+    /// データベースを追加する
     /// </summary>
     /// <typeparam name="T">データベースの型</typeparam>
-    /// <returns>データベースの値</returns>
-    public static T ReadData<T>() where T : DataBase, new()
+    /// <param name="dataBase">データベースの値</param>
+    public static void AddData<T>(T dataBase) where T : DataBase
+    {
+        AddData(ref dataBase);
+    }
+
+    /// <summary>
+    /// データを読み取る
+    /// </summary>
+    /// <typeparam name="T">データの型</typeparam>
+    /// <returns>データの値</returns>
+    public static T ReadData<T>() where T : IData, new()
     {
         var dataType = typeof(T);
         if(!_dataBases.ContainsKey(dataType))
