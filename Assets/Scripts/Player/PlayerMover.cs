@@ -6,24 +6,90 @@ using UnityEngine;
 public class PlayerMover : MonoBehaviour
 {
     private PlayerDataBase _playerDataBase;
+    private PlayerMoveData _playerMoveData = new();
+
+    private MoveState _currentDirection;
+
+    private Rigidbody2D _rb2;
 
     void Start()
     {
         var playerAction = new InputSystem_Actions().Player;
 
         var core = GetComponent<PlayerCore>();
-        core.AddListener(playerAction.MoveRight, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
-        core.AddListener(playerAction.MoveLeft, InputType.IsPressed, Move, action => new(action.ReadValue<float>(), 0), this);
+        core.AddListener(playerAction.MoveRight, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
+        core.AddListener(playerAction.MoveLeft, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
         
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
+        DataManager.AddData(_playerMoveData);
+
+        _rb2 = GetComponent<Rigidbody2D>();
+    }
+
+    void LateUpdate()
+    {
+        if(_currentDirection != MoveState.None)
+        {
+            CalcVelocity();
+        }
+        else
+        {
+            _playerMoveData.ChangeDirection(_currentDirection);
+            _rb2.linearVelocityX = 0;
+        }
+
+        _currentDirection = MoveState.None;
+    }
+
+    private void CalcVelocity()
+    {
+        var playerJumpData = DataManager.ReadData<PlayerJumpData>();
+
+        if(_currentDirection != _playerMoveData.MoveDirection)
+        {
+            if(playerJumpData.JumpState == JumpState.OnGround)
+            {
+                _playerMoveData.Invert();
+                _playerMoveData.ChangeDirection(_currentDirection);
+            }
+            else
+            {
+                Debug.Log("do");
+                _playerMoveData.SetSpeed(Mathf.MoveTowards(_playerMoveData.Speed, 0, 0.1f));
+                if(_playerMoveData.Speed == 0)
+                {
+                    _playerMoveData.ChangeDirection(_currentDirection);
+                }
+            }
+        }
+        else
+        {
+            var targetSpeed = _playerDataBase.Speed * (int)_playerMoveData.MoveDirection;
+
+            if(playerJumpData.JumpState == JumpState.OnGround)
+            {
+                _playerMoveData.SetSpeed(targetSpeed);
+            }
+            else
+            {
+                _playerMoveData.SetSpeed(Mathf.MoveTowards(_playerMoveData.Speed, targetSpeed, 0.1f));
+            }
+        }
+
+        _rb2.linearVelocityX = _playerMoveData.Speed;
     }
 
     /// <summary>
-    /// プレイヤーの横移動
+    /// プレイヤーの横移動入力
     /// </summary>
     /// <param name="input">入力の値</param>
-    public void Move(Vector2 input)
+    public void InputMove(Vector2 input)
     {
-        GetComponent<Rigidbody2D>().AddForce(Vector2.right * input.x * _playerDataBase.Speed);
+        var inputDirection = (MoveState)input.x;
+
+        if(_currentDirection != inputDirection)
+        {
+            _currentDirection = inputDirection;
+        }
     }
 }

@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     /// <typeparam name="T">データの型</typeparam>
     /// <param name="dataBase">データの値</param>
-    public static void AddData<T>(ref T dataBase) where T : IData
+    public static void AddData<T>(T dataBase) where T : IData
     {
         var dataType = dataBase.GetType();
         if(_dataBases.ContainsKey(dataType))
@@ -38,16 +38,6 @@ public class DataManager : MonoBehaviour
 
         _dataBases.Add(dataType, dataBase);
         Debug.Log($"{dataType}をデータベースに登録しました。");
-    }
-
-    /// <summary>
-    /// データベースを追加する
-    /// </summary>
-    /// <typeparam name="T">データベースの型</typeparam>
-    /// <param name="dataBase">データベースの値</param>
-    public static void AddData<T>(T dataBase) where T : DataBase
-    {
-        AddData(ref dataBase);
     }
 
     /// <summary>
