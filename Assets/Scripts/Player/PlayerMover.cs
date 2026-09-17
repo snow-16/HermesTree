@@ -35,8 +35,8 @@ public class PlayerMover : MonoBehaviour
         else if(_rb2.linearVelocityX != 0)
         {
             var playerJumpData = DataManager.ReadData<PlayerJumpData>();
-
-            _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, playerJumpData.JumpState == JumpState.OnGround ? 1 : 0.03f);
+            var damping = 1 + playerJumpData.JumpState == JumpState.OnGround ? _playerDataBase.FrictionDamping : _playerDataBase.AirDamping;
+            _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, 1 / damping);
         }
 
         _currentDirection = MoveState.None;
@@ -48,12 +48,12 @@ public class PlayerMover : MonoBehaviour
 
         if(playerJumpData.JumpState == JumpState.OnGround)
         {
-            _rb2.linearVelocityX = (int)_currentDirection * _playerDataBase.Speed;
+            _rb2.linearVelocityX = (int)_currentDirection * _playerDataBase.MaxSpeed;
         }
         else
         {
-            _rb2.linearVelocityX += (int)_currentDirection * 0.1f;
-            _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.Speed * 0.8f);
+            _rb2.linearVelocityX += (int)_currentDirection / (1 + _playerDataBase.ControlAirResistance);
+            _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.MaxSpeed / (1 + _playerDataBase.BasicAirResistance));
         }
     }
 
