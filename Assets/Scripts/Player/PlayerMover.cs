@@ -32,10 +32,11 @@ public class PlayerMover : MonoBehaviour
         {
             CalcVelocity();
         }
-        else
+        else if(_rb2.linearVelocityX != 0)
         {
-            _playerMoveData.ChangeDirection(_currentDirection);
-            _rb2.linearVelocityX = 0;
+            var playerJumpData = DataManager.ReadData<PlayerJumpData>();
+
+            _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, playerJumpData.JumpState == JumpState.OnGround ? 1 : 0.03f);
         }
 
         _currentDirection = MoveState.None;
@@ -45,38 +46,15 @@ public class PlayerMover : MonoBehaviour
     {
         var playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
-        if(_currentDirection != _playerMoveData.MoveDirection)
+        if(playerJumpData.JumpState == JumpState.OnGround)
         {
-            if(playerJumpData.JumpState == JumpState.OnGround)
-            {
-                _playerMoveData.Invert();
-                _playerMoveData.ChangeDirection(_currentDirection);
-            }
-            else
-            {
-                Debug.Log("do");
-                _playerMoveData.SetSpeed(Mathf.MoveTowards(_playerMoveData.Speed, 0, 0.1f));
-                if(_playerMoveData.Speed == 0)
-                {
-                    _playerMoveData.ChangeDirection(_currentDirection);
-                }
-            }
+            _rb2.linearVelocityX = (int)_currentDirection * _playerDataBase.Speed;
         }
         else
         {
-            var targetSpeed = _playerDataBase.Speed * (int)_playerMoveData.MoveDirection;
-
-            if(playerJumpData.JumpState == JumpState.OnGround)
-            {
-                _playerMoveData.SetSpeed(targetSpeed);
-            }
-            else
-            {
-                _playerMoveData.SetSpeed(Mathf.MoveTowards(_playerMoveData.Speed, targetSpeed, 0.1f));
-            }
+            _rb2.linearVelocityX += (int)_currentDirection * 0.1f;
+            _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.Speed * 0.8f);
         }
-
-        _rb2.linearVelocityX = _playerMoveData.Speed;
     }
 
     /// <summary>
