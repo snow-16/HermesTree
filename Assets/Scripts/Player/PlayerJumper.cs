@@ -38,6 +38,11 @@ public class PlayerJumper : MonoBehaviour
         else
         {
             _underDetection.enabled = true;
+
+            if(_rb2.gravityScale == _playerDataBase.GravityOnHover && _rb2.linearVelocityY < _playerDataBase.HorveringBorder)
+            {
+                _rb2.gravityScale = _playerDataBase.GravityOnFall;
+            }
         }
     }
 
@@ -50,7 +55,7 @@ public class PlayerJumper : MonoBehaviour
         if(_playerJumpData.JumpState == JumpState.OnGround)
         {
             _rb2.linearVelocityY = _playerDataBase.JumpPower;
-            _rb2.gravityScale = 0;
+            _rb2.gravityScale = _playerDataBase.GravityOnRise;
             _totalPersevere = 0;
             _isPersevere = true;
             _playerJumpData.Jump();
@@ -64,16 +69,20 @@ public class PlayerJumper : MonoBehaviour
             _totalPersevere += 1;
             _rb2.linearVelocityY = Mathf.Min(_rb2.linearVelocityY + _playerDataBase.PerseverePower, _playerDataBase.MaxJumpRise);
         }
-        else if(_rb2.gravityScale == 0)
+        else if(_rb2.gravityScale == _playerDataBase.GravityOnRise)
         {
-            _rb2.gravityScale = 3;
+            _rb2.gravityScale = _playerDataBase.GravityOnHover;
         }
     }
 
     public void Relax(Vector2 input)
     {
         _isPersevere = false;
-        _rb2.gravityScale = 3;
+
+        if(_rb2.gravityScale == _playerDataBase.GravityOnRise)
+        {
+            _rb2.gravityScale = _playerDataBase.GravityOnHover;
+        }
     }
 
     public void Landing()
