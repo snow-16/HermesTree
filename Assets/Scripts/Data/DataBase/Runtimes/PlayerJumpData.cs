@@ -7,4 +7,9 @@ public class PlayerJumpData : IData
     {
         _jumpState = JumpState.Rise;
     }
+
+    public void Landing()
+    {
+        _jumpState = JumpState.OnGround;
+    }
 }

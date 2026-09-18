@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad9ca41915ff4494ae31b36da72ab4a, type: 3}
   m_Name: PlayerDataBase
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataBase
-  _speed: 6.15
+  _maxSpeed: 10
+  _basicAirResistance: 0.25
+  _controlAirResistance: 10
+  _frictionDamping: 9
+  _airDamping: 38
