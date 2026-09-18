@@ -22,4 +22,24 @@ public class PlayerDataBase : DataBase
     [SerializeField]
     private float _airDamping;
     public float AirDamping => _airDamping;
+
+    [SerializeField]
+    private float _jumpPower;
+    public float JumpPower => _jumpPower;
+
+    [SerializeField]
+    private float _hoveringBorder;
+    public float HorveringBorder => _hoveringBorder;
+
+    [SerializeField]
+    private float _gravityOnRise;
+    public float GravityOnRise => _gravityOnRise;
+
+    [SerializeField]
+    private float _gravityOnHover;
+    public float GravityOnHover => _gravityOnHover;
+
+    [SerializeField]
+    private float _gravityOnFall;
+    public float GravityOnFall => _gravityOnFall;
 }

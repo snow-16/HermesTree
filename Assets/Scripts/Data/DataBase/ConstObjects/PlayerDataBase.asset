@@ -15,5 +15,10 @@ MonoBehaviour:
   _maxSpeed: 10
   _basicAirResistance: 0.25
   _controlAirResistance: 10
-  _frictionDamping: 9
+  _frictionDamping: 4.32
   _airDamping: 38
+  _jumpPower: 10
+  _hoveringBorder: 0
+  _gravityOnRise: 0
+  _gravityOnHover: 0
+  _gravityOnFall: 0

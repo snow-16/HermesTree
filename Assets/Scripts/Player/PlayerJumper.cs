@@ -8,6 +8,7 @@ public class PlayerJumper : MonoBehaviour
     [SerializeField]
     private LinearHitDetection _underDetection;
 
+    private PlayerDataBase _playerDataBase;
     private PlayerJumpData _playerJumpData = new();
 
     private Rigidbody2D _rb2;
@@ -17,6 +18,7 @@ public class PlayerJumper : MonoBehaviour
         var core = GetComponent<PlayerCore>();
         core.AddListener(new InputSystem_Actions().Player.Jump, InputType.NowPressed, Jump, action => new(), this);
 
+        _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         DataManager.AddData(_playerJumpData);
 
         _rb2 = GetComponent<Rigidbody2D>();
@@ -42,7 +44,7 @@ public class PlayerJumper : MonoBehaviour
     {
         if(_playerJumpData.JumpState == JumpState.OnGround)
         {
-            _rb2.linearVelocityY = 10;
+            _rb2.linearVelocityY = _playerDataBase.JumpPower;
             _playerJumpData.Jump();
         }
     }
