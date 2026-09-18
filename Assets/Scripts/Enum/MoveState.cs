@@ -6,4 +6,5 @@ public enum MoveState
     None = 0,
     Left = -1,
     Right = 1,
+    Both,
 }

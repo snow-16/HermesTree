@@ -8,7 +8,8 @@ public class PlayerMover : MonoBehaviour
     private PlayerDataBase _playerDataBase;
     private PlayerMoveData _playerMoveData = new();
 
-    private MoveState _currentDirection;
+    private MoveState _preInput = MoveState.None;
+    private MoveState _currentInput;
 
     private Rigidbody2D _rb2;
 
@@ -28,31 +29,44 @@ public class PlayerMover : MonoBehaviour
 
     void LateUpdate()
     {
-        if(_currentDirection != MoveState.None)
+        if(_currentInput != MoveState.None)
         {
             CalcVelocity();
         }
         else if(_rb2.linearVelocityX != 0)
         {
             var playerJumpData = DataManager.ReadData<PlayerJumpData>();
-            var damping = 1 + playerJumpData.JumpState == JumpState.OnGround ? _playerDataBase.FrictionDamping : _playerDataBase.AirDamping;
-            _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, 1 / damping);
+            var damping = playerJumpData.JumpState == JumpState.OnGround ? _playerDataBase.FrictionDamping : _playerDataBase.AirDamping;
+            _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, 1 / (1 + damping));
         }
 
-        _currentDirection = MoveState.None;
+        _preInput = _currentInput;
+        _currentInput = MoveState.None;
     }
 
     private void CalcVelocity()
     {
+        if(_preInput != _currentInput)
+        {
+            if(_preInput == MoveState.Both || _preInput == MoveState.None)
+            {
+                _playerMoveData.ChangeDirection(_currentInput);
+            }
+            else
+            {
+                _playerMoveData.InvertDirection();
+            }
+        }
+
         var playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
         if(playerJumpData.JumpState == JumpState.OnGround)
         {
-            _rb2.linearVelocityX = (int)_currentDirection * _playerDataBase.MaxSpeed;
+            _rb2.linearVelocityX = (int)_playerMoveData.MoveDirection * _playerDataBase.MaxSpeed;
         }
         else
         {
-            _rb2.linearVelocityX += (int)_currentDirection / (1 + _playerDataBase.ControlAirResistance);
+            _rb2.linearVelocityX += (int)_playerMoveData.MoveDirection / (1 + _playerDataBase.ControlAirResistance);
             _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.MaxSpeed / (1 + _playerDataBase.BasicAirResistance));
         }
     }
@@ -65,9 +79,13 @@ public class PlayerMover : MonoBehaviour
     {
         var inputDirection = (MoveState)input.x;
 
-        if(_currentDirection != inputDirection)
+        if(_currentInput == MoveState.None)
         {
-            _currentDirection = inputDirection;
+            _currentInput = inputDirection;
+        }
+        else if(_currentInput != inputDirection)
+        {
+            _currentInput = MoveState.Both;
         }
     }
 }

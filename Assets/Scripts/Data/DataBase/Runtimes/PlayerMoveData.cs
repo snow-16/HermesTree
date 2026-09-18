@@ -1,15 +1,15 @@
 public class PlayerMoveData : IData
 {
-    private float _speed;
-    public float Speed => _speed;
+    private MoveState _moveDirection;
+    public MoveState MoveDirection => _moveDirection;
 
-    public void Invert()
+    public void ChangeDirection(MoveState dir)
     {
-        _speed *= -1;
+        _moveDirection = dir;
     }
 
-    public void SetSpeed(float speed)
+    public void InvertDirection()
     {
-        _speed = speed;
+        _moveDirection = (MoveState)((int)_moveDirection * -1);
     }
 }
