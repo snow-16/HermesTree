@@ -28,6 +28,18 @@ public class PlayerDataBase : DataBase
     public float JumpPower => _jumpPower;
 
     [SerializeField]
+    private float _maxJumpRise;
+    public float MaxJumpRise => _maxJumpRise;
+
+    [SerializeField]
+    private float _perseverePower;
+    public float PerseverePower => _perseverePower;
+
+    [SerializeField]
+    private int _maxPersevere;
+    public int MaxPersevere => _maxPersevere;
+
+    [SerializeField]
     private float _hoveringBorder;
     public float HorveringBorder => _hoveringBorder;
 
