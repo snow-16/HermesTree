@@ -41,16 +41,15 @@ public class PlayerJumper : MonoBehaviour
         else
         {
             _underDetection.enabled = true;
+            _playerJumpData.Fall();
 
-            if(_rb2.gravityScale == _playerDataBase.GravityOnHover && _rb2.linearVelocityY < _playerDataBase.HorveringBorder)
+            if(_rb2.gravityScale == _playerDataBase.GravityOnRise)
+            {
+                _rb2.gravityScale = _playerDataBase.GravityOnHover;
+            }
+            else if(_rb2.gravityScale == _playerDataBase.GravityOnHover && _rb2.linearVelocityY < _playerDataBase.HorveringBorder)
             {
                 _rb2.gravityScale = _playerDataBase.GravityOnFall;
-                _playerJumpData.Fall();
-            }
-
-            if(_rb2.linearVelocityY == 0)
-            {
-                
             }
         }
     }

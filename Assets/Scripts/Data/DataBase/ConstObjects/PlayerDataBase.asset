@@ -25,4 +25,4 @@ MonoBehaviour:
   _gravityOnRise: 0
   _gravityOnHover: 3
   _gravityOnFall: 5
-  _coyoteTime: 0.2
+  _coyoteTime: 0.1
