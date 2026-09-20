@@ -21,7 +21,7 @@ public class LinearHitDetection : MonoBehaviour
 
     void Update()
     {
-        var hit = Physics2D.Linecast((Vector2)transform.position + edge.points[0], (Vector2)transform.position + edge.points[1], _hitableLayer);
+        var hit = Physics2D.Linecast((Vector2)transform.position + edge.points[0] * transform.parent.lossyScale, (Vector2)transform.position + edge.points[1] * transform.parent.lossyScale, _hitableLayer);
 
         if(hit)
         {

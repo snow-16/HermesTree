@@ -10,6 +10,7 @@ public class PlayerMover : MonoBehaviour
 
     private MoveState _preInput = MoveState.None;
     private MoveState _currentInput;
+    private MoveState _wallHitDirection;
 
     private Rigidbody2D _rb2;
 
@@ -59,16 +60,19 @@ public class PlayerMover : MonoBehaviour
             }
         }
 
-        var playerJumpData = DataManager.ReadData<PlayerJumpData>();
+        if(_wallHitDirection != MoveState.Both && _wallHitDirection != _playerMoveData.MoveDirection)
+        {
+            var playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
-        if(playerJumpData.JumpState == JumpState.OnGround)
-        {
-            _rb2.linearVelocityX = (int)_playerMoveData.MoveDirection * _playerDataBase.MaxSpeed;
-        }
-        else
-        {
-            _rb2.linearVelocityX += (int)_playerMoveData.MoveDirection / (1 + _playerDataBase.ControlAirResistance);
-            _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.MaxSpeed / (1 + _playerDataBase.BasicAirResistance));
+            if(playerJumpData.JumpState == JumpState.OnGround)
+            {
+                _rb2.linearVelocityX = (int)_playerMoveData.MoveDirection * _playerDataBase.MaxSpeed;
+            }
+            else
+            {
+                _rb2.linearVelocityX += (int)_playerMoveData.MoveDirection / (1 + _playerDataBase.ControlAirResistance);
+                _rb2.linearVelocityX = Mathf.Sign(_rb2.linearVelocityX) * Mathf.Min(Mathf.Abs(_rb2.linearVelocityX), _playerDataBase.MaxSpeed / (1 + _playerDataBase.BasicAirResistance));
+            }
         }
     }
 
@@ -88,5 +92,35 @@ public class PlayerMover : MonoBehaviour
         {
             _currentInput = MoveState.Both;
         }
+    }
+
+    public void HitWallRight()
+    {
+        HitWall(MoveState.Right);
+    }
+
+    public void ExitWallRight()
+    {
+        ExitWall(MoveState.Right);
+    }
+
+    public void HitWallLeft()
+    {
+        HitWall(MoveState.Left);
+    }
+
+    public void ExitWallLeft()
+    {
+        ExitWall(MoveState.Left);
+    }
+
+    public void HitWall(MoveState direction)
+    {
+        _wallHitDirection = _wallHitDirection == MoveState.None || _wallHitDirection == direction ? direction : MoveState.Both;
+    }
+
+    public void ExitWall(MoveState direction)
+    {
+        _wallHitDirection = _wallHitDirection == MoveState.None || _wallHitDirection == direction ? MoveState.None : (MoveState)((int)direction * -1);
     }
 }
