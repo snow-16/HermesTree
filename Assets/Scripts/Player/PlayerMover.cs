@@ -20,6 +20,7 @@ public class PlayerMover : MonoBehaviour
         var core = GetComponent<PlayerCore>();
         core.AddListener(playerAction.MoveRight, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
         core.AddListener(playerAction.MoveLeft, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
+        core.AddListener(playerAction.Move, InputType.IsPressed, InputMove, action => action.ReadValue<Vector2>(), this);
         
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         DataManager.AddData(_playerMoveData);
@@ -77,7 +78,7 @@ public class PlayerMover : MonoBehaviour
     /// <param name="input">入力の値</param>
     public void InputMove(Vector2 input)
     {
-        var inputDirection = (MoveState)input.x;
+        var inputDirection = (MoveState)Mathf.Sign(input.x);
 
         if(_currentInput == MoveState.None)
         {

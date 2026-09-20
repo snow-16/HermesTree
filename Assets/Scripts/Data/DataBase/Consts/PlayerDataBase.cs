@@ -54,4 +54,8 @@ public class PlayerDataBase : DataBase
     [SerializeField]
     private float _gravityOnFall;
     public float GravityOnFall => _gravityOnFall;
+
+    [SerializeField]
+    private float _coyoteTime;
+    public float CoyoteTime => _coyoteTime;
 }

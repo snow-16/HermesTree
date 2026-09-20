@@ -1,3 +1,5 @@
+using System;
+using R3;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +13,7 @@ public class PlayerJumper : MonoBehaviour
     private PlayerDataBase _playerDataBase;
     private PlayerJumpData _playerJumpData = new();
 
+    private bool _canJumping;
     private float _totalPersevere;
     private bool _isPersevere;
 
@@ -42,6 +45,12 @@ public class PlayerJumper : MonoBehaviour
             if(_rb2.gravityScale == _playerDataBase.GravityOnHover && _rb2.linearVelocityY < _playerDataBase.HorveringBorder)
             {
                 _rb2.gravityScale = _playerDataBase.GravityOnFall;
+                _playerJumpData.Fall();
+            }
+
+            if(_rb2.linearVelocityY == 0)
+            {
+                
             }
         }
     }
@@ -52,13 +61,14 @@ public class PlayerJumper : MonoBehaviour
     /// <param name="input">入力の値</param>
     public void Jump(Vector2 input)
     {
-        if(_playerJumpData.JumpState == JumpState.OnGround)
+        if(_canJumping)
         {
             _rb2.linearVelocityY = _playerDataBase.JumpPower;
             _rb2.gravityScale = _playerDataBase.GravityOnRise;
             _totalPersevere = 0;
             _isPersevere = true;
             _playerJumpData.Jump();
+            _canJumping = false;
         }
     }
 
@@ -87,6 +97,23 @@ public class PlayerJumper : MonoBehaviour
 
     public void Landing()
     {
-        _playerJumpData.Landing();
+        if(_playerJumpData.JumpState == JumpState.Fall)
+        {
+            _playerJumpData.Landing();
+            _canJumping = true;
+        }
+    }
+
+    public void Slipping()
+    {
+        if(_playerJumpData.JumpState == JumpState.OnGround)
+        {
+            _playerJumpData.Fall();
+
+            Observable
+            .Timer(TimeSpan.FromSeconds(_playerDataBase.CoyoteTime))
+            .TakeUntil(Observable.EveryUpdate().Where(_ => !_canJumping))
+            .Subscribe(_ => _canJumping = false);
+        }
     }
 }

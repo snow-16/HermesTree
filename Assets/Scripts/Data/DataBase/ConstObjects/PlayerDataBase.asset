@@ -17,8 +17,12 @@ MonoBehaviour:
   _controlAirResistance: 10
   _frictionDamping: 4.32
   _airDamping: 38
-  _jumpPower: 10
-  _hoveringBorder: 0
+  _jumpPower: 8
+  _maxJumpRise: 16
+  _perseverePower: 0.1
+  _maxPersevere: 40
+  _hoveringBorder: -0.2
   _gravityOnRise: 0
-  _gravityOnHover: 0
-  _gravityOnFall: 0
+  _gravityOnHover: 3
+  _gravityOnFall: 5
+  _coyoteTime: 0.2
