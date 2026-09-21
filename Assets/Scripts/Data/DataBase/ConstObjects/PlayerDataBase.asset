@@ -26,3 +26,4 @@ MonoBehaviour:
   _gravityOnHover: 3.8
   _gravityOnFall: 7.02
   _coyoteTime: 0.1
+  _sightRange: 264.4

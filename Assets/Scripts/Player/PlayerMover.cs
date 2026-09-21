@@ -6,7 +6,8 @@ using UnityEngine;
 public class PlayerMover : MonoBehaviour
 {
     private PlayerDataBase _playerDataBase;
-    private PlayerMoveData _playerMoveData = new();
+    private PlayerMoveData _playerMoveData;
+    private PlayerJumpData _playerJumpData;
 
     private MoveState _preInput = MoveState.None;
     private MoveState _currentInput;
@@ -27,9 +28,15 @@ public class PlayerMover : MonoBehaviour
         InputObserver.SwitchPlayerEnabled(true);
         
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
-        DataManager.AddData(_playerMoveData);
+        _playerMoveData = DataManager.ReadData<PlayerMoveData>();
+        _playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
         _rb2 = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        _playerMoveData.UpdatePosition(transform.position);
     }
 
     void LateUpdate()
@@ -40,8 +47,7 @@ public class PlayerMover : MonoBehaviour
         }
         else if(_rb2.linearVelocityX != 0)
         {
-            var playerJumpData = DataManager.ReadData<PlayerJumpData>();
-            var damping = playerJumpData.JumpState == JumpState.OnGround ? _playerDataBase.FrictionDamping : _playerDataBase.AirDamping;
+            var damping = _playerJumpData.JumpState == JumpState.OnGround ? _playerDataBase.FrictionDamping : _playerDataBase.AirDamping;
             _rb2.linearVelocityX = Mathf.MoveTowards(_rb2.linearVelocityX, 0, 1 / (1 + damping));
         }
 
@@ -65,9 +71,7 @@ public class PlayerMover : MonoBehaviour
 
         if(_wallHitDirection != MoveState.Both && _wallHitDirection != _playerMoveData.MoveDirection)
         {
-            var playerJumpData = DataManager.ReadData<PlayerJumpData>();
-
-            if(playerJumpData.JumpState == JumpState.OnGround)
+            if(_playerJumpData.JumpState == JumpState.OnGround)
             {
                 _rb2.linearVelocityX = (int)_playerMoveData.MoveDirection * _playerDataBase.MaxSpeed;
             }

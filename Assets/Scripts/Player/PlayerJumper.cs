@@ -11,7 +11,7 @@ public class PlayerJumper : MonoBehaviour
     private LinearHitDetection _underDetection;
 
     private PlayerDataBase _playerDataBase;
-    private PlayerJumpData _playerJumpData = new();
+    private PlayerJumpData _playerJumpData;
 
     private bool _canJumping;
     private float _totalPersevere;
@@ -27,7 +27,7 @@ public class PlayerJumper : MonoBehaviour
         listenerBuilder.SetType(InputType.NowReleaced).SetAction(Relax).Build();
 
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
-        DataManager.AddData(_playerJumpData);
+        _playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
         _rb2 = GetComponent<Rigidbody2D>();
     }

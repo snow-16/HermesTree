@@ -15,17 +15,17 @@ public static class DataManager
     /// データを追加する
     /// </summary>
     /// <typeparam name="T">データの型</typeparam>
-    /// <param name="dataBase">データの値</param>
-    public static void AddData<T>(T dataBase) where T : IData
+    /// <param name="data">データの値</param>
+    public static void AddData<T>(T data) where T : IData
     {
-        var dataType = dataBase.GetType();
+        var dataType = data.GetType();
         if(_dataBases.ContainsKey(dataType))
         {
             Debug.LogError($"{dataType}は既に登録されています。データベースを二重に登録することはできません。");
             return;
         }
 
-        _dataBases.Add(dataType, dataBase);
+        _dataBases.Add(dataType, data);
         Debug.Log($"{dataType}をデータベースに登録しました。");
     }
 
