@@ -5,22 +5,11 @@ using UnityEngine;
 /// <summary>
 /// 各種データベースを管理するクラス
 /// </summary>
-public class DataManager : MonoBehaviour
+public static class DataManager
 {
-    [SerializeField]
-    private List<DataBase> _defaultDataBases;
-
     private static Dictionary<Type, IData> _dataBases = new();
     /// <summary> データベースを保持するディクショナリー </summary>
     public static Dictionary<Type, IData> DataBases => _dataBases;
-
-    void Awake()
-    {
-        _defaultDataBases.ForEach(dataBase =>
-        {
-            AddData(dataBase);
-        });
-    }
 
     /// <summary>
     /// データを追加する
