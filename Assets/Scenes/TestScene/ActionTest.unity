@@ -797,6 +797,7 @@ GameObject:
   - component: {fileID: 978920912}
   - component: {fileID: 978920913}
   - component: {fileID: 978920914}
+  - component: {fileID: 978920915}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -983,6 +984,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSightMover
   _sight: {fileID: 767047830}
+--- !u!114 &978920915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978920906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c98d201068fc4440c99e497e45cbb495, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1214551823
 GameObject:
   m_ObjectHideFlags: 0

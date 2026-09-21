@@ -13,15 +13,9 @@ public class PlayerSightMover : MonoBehaviour
 
     void Awake()
     {
-        var playerAction = InputObserver.InputMap.Player;
-
-        var listenerBuilder = InputObserver.AddListener().SetInput(playerAction.Sight).SetOutputProcessing(action => action.ReadValue<Vector2>()).SetListenerObject(gameObject);
+        var listenerBuilder = InputObserver.AddListener().SetInput(InputObserver.InputMap.Player.Sight).SetOutputProcessing(action => action.ReadValue<Vector2>()).SetListenerObject(gameObject);
         listenerBuilder.SetType(InputType.IsPressed).SetAction(MoveSight).Build();
-        listenerBuilder.SetType(InputType.NowReleaced).SetAction(DisableSight).Build();
-
-        listenerBuilder = InputObserver.AddListener().SetInput(playerAction.Aim).SetOutputProcessing(action => new()).SetListenerObject(gameObject);
-        listenerBuilder.SetType(InputType.NowPressed).SetAction(EnableAim).Build();
-        listenerBuilder.SetType(InputType.NowReleaced).SetAction(DisableAim).Build();
+        listenerBuilder.SetType(InputType.IsReleaced).SetAction(DisableSight).Build();
 
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         _playerGunData = DataManager.ReadData<PlayerGunData>();
@@ -52,6 +46,7 @@ public class PlayerSightMover : MonoBehaviour
         if(_systemData.CurrentDevice is Gamepad)
         {
             _sight.gameObject.SetActive(true);
+            _playerGunData.SetAiming(true);
 
             ChangeSightOffset(input * _playerDataBase.SightRange);
         }
@@ -62,6 +57,7 @@ public class PlayerSightMover : MonoBehaviour
         if(_systemData.CurrentDevice is Gamepad)
         {
             _sight.gameObject.SetActive(false);
+            _playerGunData.SetAiming(false);
         }
     }
 
@@ -71,15 +67,6 @@ public class PlayerSightMover : MonoBehaviour
         var targetPos = screenPlayerPos + offset;
         var inScreenPos = new Vector3(Mathf.Clamp(targetPos.x, 0, Screen.width), Mathf.Clamp(targetPos.y, 0, Screen.height), targetPos.z);
         _sight.transform.position = inScreenPos;
-    }
-
-    private void EnableAim(Vector2 input)
-    {
-        _playerGunData.SetAiming(true);
-    }
-
-    private void DisableAim(Vector2 input)
-    {
-        _playerGunData.SetAiming(false);
+        _playerGunData.UpdatePosition(inScreenPos);
     }
 }

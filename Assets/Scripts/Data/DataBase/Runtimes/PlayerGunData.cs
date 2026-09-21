@@ -12,4 +12,9 @@ public class PlayerGunData : IData
     {
         _isAiming = isAiming;
     }
+
+    public void UpdatePosition(Vector2 pos)
+    {
+        _targetPosition = pos;
+    }
 }

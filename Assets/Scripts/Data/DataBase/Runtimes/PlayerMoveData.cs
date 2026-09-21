@@ -8,6 +8,9 @@ public class PlayerMoveData : IData
     private Vector2 _position;
     public Vector2 Position => _position;
 
+    private Vector2? _teleportTarget;
+    public Vector2? TeleportTarget => _teleportTarget;
+
     public void ChangeDirection(MoveState dir)
     {
         _moveDirection = dir;
@@ -21,5 +24,15 @@ public class PlayerMoveData : IData
     public void UpdatePosition(Vector2 pos)
     {
         _position = pos;
+    }
+
+    public void SetTeleportTarget(Vector2 targetPos)
+    {
+        _teleportTarget = targetPos;
+    }
+
+    public void EndTeleport()
+    {
+        _teleportTarget = null;
     }
 }

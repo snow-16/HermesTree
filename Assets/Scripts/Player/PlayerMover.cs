@@ -37,6 +37,12 @@ public class PlayerMover : MonoBehaviour
     void Update()
     {
         _playerMoveData.UpdatePosition(transform.position);
+
+        if(_playerMoveData.TeleportTarget != null)
+        {
+            transform.position = _playerMoveData.TeleportTarget.Value;
+            _playerMoveData.EndTeleport();
+        }
     }
 
     void LateUpdate()
