@@ -17,7 +17,7 @@ public class PlayerMover : MonoBehaviour
 
     void Start()
     {
-        var playerAction = new InputSystem_Actions().Player;
+        var playerAction = InputObserver.InputMap.Player;
 
         var listenerBuilder = InputObserver.AddListener().SetType(InputType.IsPressed).SetAction(InputMove).SetListenerObject(gameObject);
         var keyBoardBuilder = listenerBuilder.SetOutputProcessing(action => new(action.ReadValue<float>(), 0));

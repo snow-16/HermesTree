@@ -23,6 +23,7 @@ public class GameInitializer : MonoBehaviour
             ResetData();
             _systemData = DataManager.ReadData<SystemData>();
 
+            InputObserver.CreateInputs();
             _systemData.CheckingGamepad();
             InputSystem.onDeviceChange += _systemData.OnDeviceChanged;
         }

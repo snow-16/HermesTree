@@ -13,30 +13,34 @@ public static class InputObserver
     public static Dictionary<string, Dictionary<InputType, ActionContainer>> InputActions { get => _inputActions; set => _inputActions = value; }
 
     private static InputSystem_Actions _inputMap;
+    public static InputSystem_Actions InputMap => _inputMap;
 
-    static void CreateInputs()
+    public static void CreateInputs()
     {
-        _inputMap = new InputSystem_Actions();
-
-        foreach(var input in _inputMap)
+        if(_inputActions.Count == 0)
         {
-            var actionContainerTemplate = new Dictionary<InputType, ActionContainer>
-            {
-                { InputType.IsPressed, new(action => action.IsPressed()) },
-                { InputType.IsReleaced, new(action => !action.IsPressed()) },
-                { InputType.NowPressed, new(action => action.WasPressedThisFrame()) },
-                { InputType.NowReleaced, new(action => action.WasReleasedThisFrame()) }
-            };
-            
-            _inputActions.Add(input.name, actionContainerTemplate);
+            _inputMap = new InputSystem_Actions();
 
-            foreach(InputType inputType in Enum.GetValues(typeof(InputType)))
+            foreach(var input in _inputMap)
             {
-                var actionContainer = _inputActions[input.name][inputType];
-                Observable.EveryUpdate().Where(_ => actionContainer.action != null).Where(_ => actionContainer.actionTrigger(input)).Subscribe(_ =>
+                var actionContainerTemplate = new Dictionary<InputType, ActionContainer>
                 {
-                    actionContainer.action.Invoke(actionContainer.actionOutput(input));
-                });
+                    { InputType.IsPressed, new(action => action.IsPressed()) },
+                    { InputType.IsReleaced, new(action => !action.IsPressed()) },
+                    { InputType.NowPressed, new(action => action.WasPressedThisFrame()) },
+                    { InputType.NowReleaced, new(action => action.WasReleasedThisFrame()) }
+                };
+                
+                _inputActions.Add(input.name, actionContainerTemplate);
+
+                foreach(InputType inputType in Enum.GetValues(typeof(InputType)))
+                {
+                    var actionContainer = _inputActions[input.name][inputType];
+                    Observable.EveryUpdate().Where(_ => actionContainer.action != null).Where(_ => actionContainer.actionTrigger(input)).Subscribe(_ =>
+                    {
+                        actionContainer.action.Invoke(actionContainer.actionOutput(input));
+                    });
+                }
             }
         }
     }
@@ -44,17 +48,8 @@ public static class InputObserver
     /// <summary>
     /// 入力を受け取るメソッドを追加する
     /// </summary>
-    /// <param name="keyBindType">キーバインドの種類</param>
-    /// <param name="inputType">入力の種類</param>
-    /// <param name="inputAction">購読メソッド</param>
-    /// <param name="listenObject">メソッドの持ち主</param>
     public static ListenerBuilder AddListener()
     {
-        if(_inputActions.Count == 0)
-        {
-            CreateInputs();
-        }
-
         return new();
     }
 
