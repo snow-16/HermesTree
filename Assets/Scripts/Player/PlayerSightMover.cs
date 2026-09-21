@@ -30,8 +30,7 @@ public class PlayerSightMover : MonoBehaviour
             var mousePos = Mouse.current.position.ReadValue();
             var screenPlayerPos = Camera.main.WorldToScreenPoint(transform.position);
             var clampedOffset = Vector3.ClampMagnitude(mousePos - (Vector2)screenPlayerPos, _playerDataBase.SightRange);
-
-            _sight.transform.position = screenPlayerPos + clampedOffset;
+            ChangeSightOffset(clampedOffset);
         }
     }
 
@@ -41,8 +40,7 @@ public class PlayerSightMover : MonoBehaviour
         {
             _sight.SetActive(true);
 
-            var screenPlayerPos = Camera.main.WorldToScreenPoint(transform.position);
-            _sight.transform.position = screenPlayerPos + (Vector3)input * _playerDataBase.SightRange;
+            ChangeSightOffset(input * _playerDataBase.SightRange);
         }
     }
 
@@ -52,5 +50,13 @@ public class PlayerSightMover : MonoBehaviour
         {
             _sight.SetActive(false);
         }
+    }
+
+    private void ChangeSightOffset(Vector3 offset)
+    {
+        var screenPlayerPos = Camera.main.WorldToScreenPoint(transform.position);
+        var targetPos = screenPlayerPos + offset;
+        var inScreenPos = new Vector3(Mathf.Clamp(targetPos.x, 0, Screen.width), Mathf.Clamp(targetPos.y, 0, Screen.height), targetPos.z);
+        _sight.transform.position = inScreenPos;
     }
 }
