@@ -18,10 +18,13 @@ public class PlayerMover : MonoBehaviour
     {
         var playerAction = new InputSystem_Actions().Player;
 
-        var core = GetComponent<PlayerCore>();
-        core.AddListener(playerAction.MoveRight, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
-        core.AddListener(playerAction.MoveLeft, InputType.IsPressed, InputMove, action => new(action.ReadValue<float>(), 0), this);
-        core.AddListener(playerAction.Move, InputType.IsPressed, InputMove, action => action.ReadValue<Vector2>(), this);
+        var listenerBuilder = InputObserver.AddListener().SetType(InputType.IsPressed).SetAction(InputMove).SetListenerObject(gameObject);
+        var keyBoardBuilder = listenerBuilder.SetOutputProcessing(action => new(action.ReadValue<float>(), 0));
+        keyBoardBuilder.SetInput(playerAction.MoveRight).Build();
+        keyBoardBuilder.SetInput(playerAction.MoveLeft).Build();
+        listenerBuilder.SetOutputProcessing(action => action.ReadValue<Vector2>()).SetInput(playerAction.Move).Build();
+
+        InputObserver.SwitchPlayerEnabled(true);
         
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         DataManager.AddData(_playerMoveData);

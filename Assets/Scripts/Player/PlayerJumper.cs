@@ -21,10 +21,10 @@ public class PlayerJumper : MonoBehaviour
 
     void Start()
     {
-        var core = GetComponent<PlayerCore>();
-        core.AddListener(new InputSystem_Actions().Player.Jump, InputType.NowPressed, Jump, action => new(), this);
-        core.AddListener(new InputSystem_Actions().Player.Jump, InputType.IsPressed, Persevere, action => new(), this);
-        core.AddListener(new InputSystem_Actions().Player.Jump, InputType.NowReleaced, Relax, action => new(), this);
+        var listenerBuilder = InputObserver.AddListener().SetInput(new InputSystem_Actions().Player.Jump).SetOutputProcessing(action => new()).SetListenerObject(gameObject);
+        listenerBuilder.SetType(InputType.NowPressed).SetAction(Jump).Build();
+        listenerBuilder.SetType(InputType.IsPressed).SetAction(Persevere).Build();
+        listenerBuilder.SetType(InputType.NowReleaced).SetAction(Relax).Build();
 
         _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         DataManager.AddData(_playerJumpData);

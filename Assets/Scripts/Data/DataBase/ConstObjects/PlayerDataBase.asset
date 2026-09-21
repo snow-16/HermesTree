@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad9ca41915ff4494ae31b36da72ab4a, type: 3}
   m_Name: PlayerDataBase
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataBase
-  _maxSpeed: 10
+  _maxSpeed: 13.37
   _basicAirResistance: 0.25
   _controlAirResistance: 10
   _frictionDamping: 4.32
   _airDamping: 38
-  _jumpPower: 8
-  _maxJumpRise: 16
-  _perseverePower: 0.1
-  _maxPersevere: 40
+  _jumpPower: 9.84
+  _maxJumpRise: 36
+  _perseverePower: 0.17
+  _maxPersevere: 37
   _hoveringBorder: -0.2
   _gravityOnRise: 0
-  _gravityOnHover: 3
-  _gravityOnFall: 5
+  _gravityOnHover: 3.8
+  _gravityOnFall: 7.02
   _coyoteTime: 0.1
