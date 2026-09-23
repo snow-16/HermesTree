@@ -29,9 +29,9 @@ public class GameInitializer : MonoBehaviour
 
             var testTree = new SkillTreeData.TreeData(0)
             .SetName("Test")
-            .AddCell(0, DataManager.ReadData<CellDataBase>().CellList[CellType.SpeedUp])
-            .AddCell(1, DataManager.ReadData<CellDataBase>().CellList[CellType.Reflection])
-            .AddCell(2, DataManager.ReadData<CellDataBase>().CellList[CellType.Gunpowder])
+            .AddCell(0, new(CellType.SpeedUp, new(){1}))
+            .AddCell(1, new(CellType.Reflection, new(){2}))
+            .AddCell(2, new(CellType.Gunpowder))
             .AddUnlocked(0)
             .AddUnlocked(1)
             .AddUnlocked(2);
@@ -47,6 +47,8 @@ public class GameInitializer : MonoBehaviour
 
             DataManager.ReadData<PlayerGunData>().AddMagazine(3);
             DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
+
+            SkillTreeFiler.WriteTree(new());
         }
     }
 

@@ -55,7 +55,7 @@ public class SkillTreeData : IData
         public int id;
         public string name;
         public List<int> unlocked;
-        public Dictionary<int, CellSettingData> cells;
+        public Dictionary<int, CellData> cells;
 
         public TreeData(int dataId)
         {
@@ -88,7 +88,7 @@ public class SkillTreeData : IData
             return this;
         }
 
-        public TreeData AddCell(int cellNumber, CellSettingData cellData)
+        public TreeData AddCell(int cellNumber, CellData data)
         {
             if(cells.ContainsKey(cellNumber))
             {
@@ -96,8 +96,23 @@ public class SkillTreeData : IData
                 return this;
             }
 
-            cells.Add(cellNumber, cellData);
+            cells.Add(cellNumber, data);
             return this;
+        }
+    }
+
+    [Serializable]
+    public struct CellData
+    {
+        public CellType cellType;
+        public List<int> connectedCells;
+
+        public CellData(CellType type, List<int> connecteds = null)
+        {
+            connecteds ??= new();
+            
+            cellType = type;
+            connectedCells = connecteds;
         }
     }
 
