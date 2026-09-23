@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletData : IData
+public class BulletData : InstanceData
 {
     private List<IBulletProcessor> _remainingProcessors = new();
     public bool HasProcessor => _remainingProcessors.Count > 0;

@@ -38,7 +38,8 @@ public class GameInitializer : MonoBehaviour
         
         var runtimeDatas = AppDomain.CurrentDomain.GetAssemblies()
         .SelectMany(assembly => assembly.GetTypes())
-        .Where(type => typeof(IData).IsAssignableFrom(type) && !typeof(DataBase).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
+        .Where(type => typeof(IData).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
+        .Where(type => !typeof(DataBase).IsAssignableFrom(type) && !typeof(InstanceData).IsAssignableFrom(type))
         .ToList();
 
         runtimeDatas.ForEach(data =>
