@@ -47,8 +47,6 @@ public class GameInitializer : MonoBehaviour
 
             DataManager.ReadData<PlayerGunData>().AddMagazine(3);
             DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
-
-            SkillTreeFiler.WriteTree(new());
         }
     }
 
