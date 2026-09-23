@@ -6,7 +6,6 @@ public class PlayerGunner : MonoBehaviour
     [SerializeField]
     private BulletSimulator _bulletPrefab;
 
-    private PlayerDataBase _playerDataBase;
     private PlayerGunData _playerGunData;
     private PlayerMoveData _playerMoveData;
     private SystemData _systemData;
@@ -22,7 +21,6 @@ public class PlayerGunner : MonoBehaviour
         listenerBuilder.SetInput(playerAction.Shoot).SetType(InputType.NowPressed).SetAction(Shoot).Build();
         listenerBuilder.SetInput(playerAction.Teleport).SetType(InputType.NowPressed).SetAction(Teleport).Build();
 
-        _playerDataBase = DataManager.ReadData<PlayerDataBase>();
         _playerGunData = DataManager.ReadData<PlayerGunData>();
         _playerMoveData = DataManager.ReadData<PlayerMoveData>();
         _systemData = DataManager.ReadData<SystemData>();
@@ -49,7 +47,7 @@ public class PlayerGunner : MonoBehaviour
         if(_playerGunData.IsAiming)
         {
             var bulletRotation = Quaternion.FromToRotation(Vector2.up, _playerGunData.WorldTargetPosition - (Vector2)transform.position);
-            Instantiate(_bulletPrefab).Spawn(BulletType.Normal, transform.position, bulletRotation);
+            Instantiate(_bulletPrefab).Spawn(BulletType.Normal, transform.position, bulletRotation, new());
         }
     }
 

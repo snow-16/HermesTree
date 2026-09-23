@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletSimulator : MonoBehaviour
@@ -7,20 +8,45 @@ public class BulletSimulator : MonoBehaviour
     private BulletType _ownType;
     private BulletSettingData _bulletSettingData;
 
+    private TriggerProcessor _triggerProcessor;
+
     private Rigidbody2D _rb2;
 
-    public void Spawn(BulletType type, Vector2 position, Quaternion rotation)
+    public void Spawn(BulletType type, Vector2 position, Quaternion rotation, List<IBulletProcessor> processors)
     {
         _rb2 = GetComponent<Rigidbody2D>();
 
         _ownType = type;
         _bulletSettingData = DataManager.ReadData<BulletDataBase>().BulletList[_ownType];
+        _bulletData.ReFillProcessor(processors);
 
-        transform.position = position;
-        transform.rotation = rotation;
+        transform.SetPositionAndRotation(position, rotation);
         _rb2.AddForce(transform.up * _bulletSettingData.BaseSpeed, ForceMode2D.Impulse);
 
         DataManager.AddData(_bulletData, gameObject);
+    }
+
+    void Update()
+    {
+        if(_bulletData.HasProcessor)
+        {
+            _bulletData.GetProcessors().ForEach(processor => 
+            {
+                if(processor is TriggerProcessor triggerProcessor)
+                {
+                    _triggerProcessor = triggerProcessor;
+                }
+                else
+                {
+                    _bulletData = processor.Processing(_bulletData);
+                }
+            });
+        }
+        else if(_triggerProcessor != null && _triggerProcessor.ProcessingTrigger())
+        {
+            _bulletData = _triggerProcessor.Processing(_bulletData);
+            _triggerProcessor = null;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
