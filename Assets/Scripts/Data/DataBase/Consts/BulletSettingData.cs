@@ -14,4 +14,8 @@ public class BulletSettingData : DataBase
     [SerializeField]
     private int _baseBoundable;
     public int BaseBoundable => _baseBoundable;
+
+    [SerializeField]
+    private int _basePenetrable;
+    public int BasePenetrable => _basePenetrable;
 }

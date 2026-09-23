@@ -30,7 +30,7 @@ public class GameInitializer : MonoBehaviour
             var testTree = new SkillTreeData.TreeData(0)
             .SetName("Test")
             .AddCell(0, DataManager.ReadData<CellDataBase>().CellList[CellType.SpeedUp])
-            .AddCell(1, DataManager.ReadData<CellDataBase>().CellList[CellType.Reflection])
+            .AddCell(1, DataManager.ReadData<CellDataBase>().CellList[CellType.Penetration])
             .AddUnlocked(0)
             .AddUnlocked(1);
             DataManager.ReadData<SkillTreeData>().SetTree(testTree);

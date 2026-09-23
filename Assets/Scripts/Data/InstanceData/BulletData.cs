@@ -15,6 +15,11 @@ public class BulletData : InstanceData
     private int _boundableCount;
     public int BoundableCount => _boundableCount;
 
+    /// <summary> 貫通可能数 </summary>
+    private int _penetrableCount;
+    /// <summary> 貫通可能数 </summary>
+    public int PenetrableCount => _penetrableCount;
+
     public void ReFillProcessor(List<IBulletProcessor> processors)
     {
         if(!HasProcessor)
@@ -47,5 +52,15 @@ public class BulletData : InstanceData
     public void Bound()
     {
         _boundableCount--;
+    }
+
+    public void AddPenetrable(int count)
+    {
+        _penetrableCount += count;
+    }
+
+    public void Penetration()
+    {
+        _penetrableCount--;
     }
 }
