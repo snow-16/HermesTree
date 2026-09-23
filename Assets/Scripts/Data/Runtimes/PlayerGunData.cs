@@ -17,7 +17,7 @@ public class PlayerGunData : IData
 
     private MagazineData _magazine = new();
     public MagazineData Magazine => _magazine;
-    public bool HasBallet => _magazine.bullets.Count > 0;
+    public bool HasBallet => _magazine.bullets != null && _magazine.bullets.Count > 0;
     public SkillTreeData.ChartData Bullet => _magazine.bullets[0];
 
     private int _selectedMagazineNumber;
@@ -49,7 +49,6 @@ public class PlayerGunData : IData
         var magazine = _magazineBases[magazineNum];
         magazine.bullets = bullet.ToList();
         _magazineBases[magazineNum] = magazine;
-        ReloadMagazine();
     }
 
     public void UseMagazine()
