@@ -58,6 +58,11 @@ public class BulletSimulator : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if(collision.gameObject.TryGetComponent(out IDamagable damagable))
+        {
+            damagable.Damage(_bulletSettingData.BaseDamage + _bulletData.Damage);
+        }
+
         if(_bulletData.BoundableCount > 0)
         {
             _bulletData.Bound();
