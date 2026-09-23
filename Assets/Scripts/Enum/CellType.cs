@@ -6,4 +6,5 @@ public enum CellType
     SpeedUp,
     Reflection,
     Penetration,
+    Gunpowder
 }

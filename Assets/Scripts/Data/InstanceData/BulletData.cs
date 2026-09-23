@@ -44,6 +44,11 @@ public class BulletData : InstanceData
         _acceleration += addend;
     }
 
+    public void AddDamage(float addend)
+    {
+        _damage += addend;
+    }
+
     public void AddBoundable(int count)
     {
         _boundableCount += count;

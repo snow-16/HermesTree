@@ -30,16 +30,19 @@ public class GameInitializer : MonoBehaviour
             var testTree = new SkillTreeData.TreeData(0)
             .SetName("Test")
             .AddCell(0, DataManager.ReadData<CellDataBase>().CellList[CellType.SpeedUp])
-            .AddCell(1, DataManager.ReadData<CellDataBase>().CellList[CellType.Penetration])
+            .AddCell(1, DataManager.ReadData<CellDataBase>().CellList[CellType.Reflection])
+            .AddCell(2, DataManager.ReadData<CellDataBase>().CellList[CellType.Gunpowder])
             .AddUnlocked(0)
-            .AddUnlocked(1);
+            .AddUnlocked(1)
+            .AddUnlocked(2);
             DataManager.ReadData<SkillTreeData>().SetTree(testTree);
 
             var testChart = new SkillTreeData.ChartData(0)
             .SetName("Test")
             .SetPerentTree(testTree)
             .AddCell(new SkillTreeData.BranchCell(0))
-            .AddCell(new SkillTreeData.BranchCell(1));
+            .AddCell(new SkillTreeData.BranchCell(1))
+            .AddCell(new SkillTreeData.BranchCell(2));
             DataManager.ReadData<SkillTreeData>().SetChart(testChart);
 
             DataManager.ReadData<PlayerGunData>().AddMagazine(3);

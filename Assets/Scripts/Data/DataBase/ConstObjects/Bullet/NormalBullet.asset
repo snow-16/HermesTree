@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: NormalBullet
   m_EditorClassIdentifier: Assembly-CSharp::BulletSettingData
   _baseSpeed: 20
+  _baseDamage: 1
+  _baseBoundable: 0
+  _basePenetrable: 0
