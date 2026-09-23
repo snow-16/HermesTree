@@ -41,6 +41,7 @@ public class PlayerMover : MonoBehaviour
         if(_playerMoveData.TeleportTarget != null)
         {
             transform.position = _playerMoveData.TeleportTarget.Value;
+            _rb2.linearVelocity = Vector2.zero;
             _playerMoveData.EndTeleport();
         }
     }
