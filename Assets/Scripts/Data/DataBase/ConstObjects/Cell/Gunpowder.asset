@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CellSettingData
   _name: SpeedUp
   _processor:
-    rid: 6838593417118221033
+    rid: 6838593417118221152
   references:
     version: 2
     RefIds:
-    - rid: 6838593417118221033
-      type: {class: AccelerateProcessor, ns: , asm: Assembly-CSharp}
+    - rid: 6838593417118221152
+      type: {class: DamageProcessor, ns: , asm: Assembly-CSharp}
       data:
-        _addend: 10
+        _addend: 5

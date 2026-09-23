@@ -30,6 +30,7 @@ public class PlayerJumper : MonoBehaviour
         _playerJumpData = DataManager.ReadData<PlayerJumpData>();
 
         _rb2 = GetComponent<Rigidbody2D>();
+        _rb2.gravityScale = _playerDataBase.GravityOnFall;
     }
 
     void Update()
