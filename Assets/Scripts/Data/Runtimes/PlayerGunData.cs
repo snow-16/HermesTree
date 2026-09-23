@@ -35,20 +35,22 @@ public class PlayerGunData : IData
 
     public void AddMagazine(int addend)
     {
-        Array.Resize(ref _magazines, _magazines.Length + addend);
+        Array.Resize(ref _magazineBases, _magazines.Length + addend);
+        Array.Resize(ref _magazines, _magazineBases.Length);
     }
 
     public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
     {
-        if(magazineNum > _magazines.Length - 1)
+        if(magazineNum > _magazineBases.Length - 1)
         {
             Debug.LogError($"マガジン番号{magazineNum}は不正です。");
             return;
         }
 
-        var magazine = _magazines[magazineNum];
+        var magazine = _magazineBases[magazineNum];
         magazine.bullets = bullet.ToList();
-        _magazines[magazineNum] = magazine;
+        _magazineBases[magazineNum] = magazine;
+        ReloadMagazine();
     }
 
     public void UseMagazine()
@@ -56,6 +58,12 @@ public class PlayerGunData : IData
         var magazine = _magazines[_selectedMagazineNumber];
         magazine.bullets.RemoveAt(0);
         _magazines[_selectedMagazineNumber] = magazine;
+    }
+
+    public void ReloadMagazine()
+    {
+        _magazines[_selectedMagazineNumber] = _magazineBases[_selectedMagazineNumber].Clone();
+        Debug.Log("リロード");
     }
 
     public void SwitchMagazine(bool isRight)
@@ -70,6 +78,13 @@ public class PlayerGunData : IData
         public Magazine(int bulletCount)
         {
             bullets = new(new SkillTreeData.ChartData[bulletCount]);
+        }
+
+        public Magazine Clone()
+        {
+            var clone = this;
+            clone.bullets = new(bullets);
+            return clone;
         }
     }
 }

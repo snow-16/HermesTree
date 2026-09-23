@@ -20,6 +20,7 @@ public class PlayerGunner : MonoBehaviour
         aimBuilder.SetType(InputType.NowReleaced).SetAction(DisableAim).Build();
         listenerBuilder.SetInput(playerAction.Shoot).SetType(InputType.NowPressed).SetAction(Shoot).Build();
         listenerBuilder.SetInput(playerAction.Teleport).SetType(InputType.NowPressed).SetAction(Teleport).Build();
+        listenerBuilder.SetInput(playerAction.Reload).SetType(InputType.NowPressed).SetAction(Reload).Build();
 
         _playerGunData = DataManager.ReadData<PlayerGunData>();
         _playerMoveData = DataManager.ReadData<PlayerMoveData>();
@@ -62,6 +63,14 @@ public class PlayerGunner : MonoBehaviour
         {
             var targetPos = _playerGunData.WorldTargetPosition;
             _playerMoveData.SetTeleportTarget(targetPos);
+        }
+    }
+
+    private void Reload(Vector2 input)
+    {
+        if(!_playerGunData.HasBallet)
+        {
+            _playerGunData.ReloadMagazine();
         }
     }
 }
