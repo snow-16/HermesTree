@@ -26,6 +26,13 @@ public class GameInitializer : MonoBehaviour
             InputObserver.CreateInputs();
             _systemData.CheckingGamepad();
             InputSystem.onDeviceChange += _systemData.OnDeviceChanged;
+
+            var a = new SkillTreeData.ChartData().SetName("Test");
+            var c = new SkillTreeData.BranchCell();
+            a = a.AddCell(c);
+            var s = new SkillTreeData.BranchSwitch().AddCell(new SkillTreeData.BranchCell(), true).AddCell(new SkillTreeData.BranchCell(), false);
+            a = a.AddCell(s);
+            SkillTreeFiler.WriteChart(a);
         }
     }
 
