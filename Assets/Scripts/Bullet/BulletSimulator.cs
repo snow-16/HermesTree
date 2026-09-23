@@ -21,12 +21,18 @@ public class BulletSimulator : MonoBehaviour
         _bulletData.ReFillProcessor(processors);
 
         transform.SetPositionAndRotation(position, rotation);
-        _rb2.AddForce(transform.up * _bulletSettingData.BaseSpeed, ForceMode2D.Impulse);
 
         DataManager.AddData(_bulletData, gameObject);
     }
 
     void Update()
+    {
+        RunningProcessor();
+
+        _rb2.linearVelocity = transform.up * (_bulletSettingData.BaseSpeed + _bulletData.Acceleration);
+    }
+
+    private void RunningProcessor()
     {
         if(_bulletData.HasProcessor)
         {

@@ -27,4 +27,9 @@ public class BulletData : IData
         _remainingProcessors.Clear();
         return output;
     }
+
+    public void Accelarate(float addend)
+    {
+        _acceleration += addend;
+    }
 }
