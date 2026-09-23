@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BulletSimulator : MonoBehaviour
 {
+    private BulletData _bulletData = new();
+
     private BulletType _ownType;
     private BulletSettingData _bulletSettingData;
 
@@ -17,6 +19,8 @@ public class BulletSimulator : MonoBehaviour
         transform.position = position;
         transform.rotation = rotation;
         _rb2.AddForce(transform.up * _bulletSettingData.BaseSpeed, ForceMode2D.Impulse);
+
+        DataManager.AddData(_bulletData, gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

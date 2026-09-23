@@ -25,12 +25,17 @@ public static class DataManager
         if(connectedObject)
         {
             key += $"_{connectedObject.GetEntityId()}";
+            var objectName = connectedObject.name;
             
             Observable
             .EveryUpdate()
             .Where(_ => connectedObject == null)
             .Take(1)
-            .Subscribe(_ => _dataBases.Remove(key));
+            .Subscribe(_ => 
+            {
+                _dataBases.Remove(key);
+                Debug.Log($"破棄された{objectName}の{dataType}を除去しました。");
+            });
         }
 
         if(_dataBases.ContainsKey(key))
