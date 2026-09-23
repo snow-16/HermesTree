@@ -12,13 +12,13 @@ public class PlayerGunData : IData
     public Vector2 TargetPosition => _targetPosition;
     public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
-    private Magazine[] _magazineBases = new Magazine[1];
-    public Magazine[] MagazineBases => _magazineBases;
+    private MagazineData[] _magazineBases = new MagazineData[1];
+    public MagazineData[] MagazineBases => _magazineBases;
 
-    private Magazine[] _magazines = new Magazine[1];
-    public Magazine[] Magazines => _magazines;
-    public Magazine SelectedMagazine => _magazines[_selectedMagazineNumber];
-    public bool HasBallet => SelectedMagazine.bullets.Count > 0;
+    private MagazineData _magazine = new();
+    public MagazineData Magazine => _magazine;
+    public bool HasBallet => _magazine.bullets.Count > 0;
+    public SkillTreeData.ChartData Bullet => _magazine.bullets[0];
 
     private int _selectedMagazineNumber;
     public int SelectedMagazineNumber => _selectedMagazineNumber;
@@ -35,8 +35,7 @@ public class PlayerGunData : IData
 
     public void AddMagazine(int addend)
     {
-        Array.Resize(ref _magazineBases, _magazines.Length + addend);
-        Array.Resize(ref _magazines, _magazineBases.Length);
+        Array.Resize(ref _magazineBases, _magazineBases.Length + addend);
     }
 
     public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
@@ -55,32 +54,30 @@ public class PlayerGunData : IData
 
     public void UseMagazine()
     {
-        var magazine = _magazines[_selectedMagazineNumber];
-        magazine.bullets.RemoveAt(0);
-        _magazines[_selectedMagazineNumber] = magazine;
+        _magazine.bullets.RemoveAt(0);
     }
 
     public void ReloadMagazine()
     {
-        _magazines[_selectedMagazineNumber] = _magazineBases[_selectedMagazineNumber].Clone();
+        _magazine = _magazineBases[_selectedMagazineNumber].Clone();
         Debug.Log("リロード");
     }
 
     public void SwitchMagazine(bool isRight)
     {
-        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazines.Length);
+        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazineBases.Length);
     }
 
-    public struct Magazine
+    public struct MagazineData
     {
         public List<SkillTreeData.ChartData> bullets;
 
-        public Magazine(int bulletCount)
+        public MagazineData(int bulletCount)
         {
             bullets = new(new SkillTreeData.ChartData[bulletCount]);
         }
 
-        public Magazine Clone()
+        public MagazineData Clone()
         {
             var clone = this;
             clone.bullets = new(bullets);
