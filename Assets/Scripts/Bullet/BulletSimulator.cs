@@ -19,6 +19,7 @@ public class BulletSimulator : MonoBehaviour
         _ownType = type;
         _bulletSettingData = DataManager.ReadData<BulletDataBase>().BulletList[_ownType];
         _bulletData.ReFillProcessor(processors);
+        _bulletData.AddBoundable(_bulletSettingData.BaseBoundable);
 
         transform.SetPositionAndRotation(position, rotation);
 
