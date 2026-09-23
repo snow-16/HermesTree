@@ -27,8 +27,6 @@ public class GameInitializer : MonoBehaviour
             _systemData.CheckingGamepad();
             InputSystem.onDeviceChange += _systemData.OnDeviceChanged;
 
-            DataManager.ReadData<PlayerGunData>().AddMagazine();
-
             var testTree = new SkillTreeData.TreeData(0)
             .SetName("Test")
             .AddCell(0, DataManager.ReadData<CellDataBase>().CellList[CellType.SpeedUp])
@@ -41,7 +39,7 @@ public class GameInitializer : MonoBehaviour
             .AddCell(new SkillTreeData.BranchCell(0));
             DataManager.ReadData<SkillTreeData>().SetChart(testChart);
 
-            DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart);
+            DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
         }
     }
 

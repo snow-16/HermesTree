@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,9 +12,13 @@ public class PlayerGunData : IData
     public Vector2 TargetPosition => _targetPosition;
     public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
-    private List<Magazine> _magazines = new();
-    public List<Magazine> Magazines => _magazines;
+    private Magazine[] _magazineBases = new Magazine[1];
+    public Magazine[] MagazineBases => _magazineBases;
+
+    private Magazine[] _magazines = new Magazine[1];
+    public Magazine[] Magazines => _magazines;
     public Magazine SelectedMagazine => _magazines[_selectedMagazineNumber];
+    public bool HasBallet => SelectedMagazine.bullets.Count > 0;
 
     private int _selectedMagazineNumber;
     public int SelectedMagazineNumber => _selectedMagazineNumber;
@@ -28,14 +33,14 @@ public class PlayerGunData : IData
         _targetPosition = pos;
     }
 
-    public void AddMagazine()
+    public void AddMagazine(int addend)
     {
-        _magazines.Add(new());
+        Array.Resize(ref _magazines, _magazines.Length + addend);
     }
 
     public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
     {
-        if(magazineNum < _magazines.Count - 1)
+        if(magazineNum > _magazines.Length - 1)
         {
             Debug.LogError($"マガジン番号{magazineNum}は不正です。");
             return;
@@ -49,17 +54,22 @@ public class PlayerGunData : IData
     public void UseMagazine()
     {
         var magazine = _magazines[_selectedMagazineNumber];
-        magazine.bullets.RemoveAt(magazine.bullets.Count - 1);
+        magazine.bullets.RemoveAt(0);
         _magazines[_selectedMagazineNumber] = magazine;
     }
 
     public void SwitchMagazine(bool isRight)
     {
-        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazines.Count);
+        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazines.Length);
     }
 
     public struct Magazine
     {
         public List<SkillTreeData.ChartData> bullets;
+
+        public Magazine(int bulletCount)
+        {
+            bullets = new(new SkillTreeData.ChartData[bulletCount]);
+        }
     }
 }
