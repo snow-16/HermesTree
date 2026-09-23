@@ -365,6 +365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _defaultDataBases:
   - {fileID: 11400000, guid: 6a7535f4dbfdf488e9e6920326653a45, type: 2}
+  - {fileID: 11400000, guid: 7d34fc413f3914ea68f7cc2f8b434860, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c98d201068fc4440c99e497e45cbb495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _bulletPrefab: {fileID: 3005094091043064812, guid: 39186a1c472f24a969cce7364c4b8ea8, type: 3}
+  _bulletPrefab: {fileID: 3991162873761498124, guid: 39186a1c472f24a969cce7364c4b8ea8, type: 3}
 --- !u!1 &1214551823
 GameObject:
   m_ObjectHideFlags: 0

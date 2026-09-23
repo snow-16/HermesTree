@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerGunner : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _bulletPrefab;
+    private BulletSimulator _bulletPrefab;
 
     private PlayerDataBase _playerDataBase;
     private PlayerGunData _playerGunData;
@@ -48,9 +48,8 @@ public class PlayerGunner : MonoBehaviour
     {
         if(_playerGunData.IsAiming)
         {
-            var bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-            bullet.transform.rotation = Quaternion.FromToRotation(Vector2.up, _playerGunData.WorldTargetPosition - (Vector2)bullet.transform.position);
-            bullet.GetComponent<Rigidbody2D>().AddForce(bullet.transform.up * 10, ForceMode2D.Impulse);
+            var bulletRotation = Quaternion.FromToRotation(Vector2.up, _playerGunData.WorldTargetPosition - (Vector2)transform.position);
+            Instantiate(_bulletPrefab).Spawn(BulletType.Normal, transform.position, bulletRotation);
         }
     }
 
