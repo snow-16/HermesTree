@@ -47,7 +47,9 @@ public class PlayerGunner : MonoBehaviour
         if(_playerGunData.IsAiming)
         {
             var bulletRotation = Quaternion.FromToRotation(Vector2.up, _playerGunData.WorldTargetPosition - (Vector2)transform.position);
-            Instantiate(_bulletPrefab).Spawn(BulletType.Normal, transform.position, bulletRotation, new(){new AccelerateProcessor(), new AccelerateProcessor()});
+            var bullet = _playerGunData.SelectedMagazine.bullets[0];
+            _playerGunData.UseMagazine();
+            Instantiate(_bulletPrefab).Spawn(BulletType.Normal, transform.position, bulletRotation, SkillTreeReader.ReadChart(bullet));
         }
     }
 

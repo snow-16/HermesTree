@@ -366,6 +366,7 @@ MonoBehaviour:
   _defaultDataBases:
   - {fileID: 11400000, guid: 6a7535f4dbfdf488e9e6920326653a45, type: 2}
   - {fileID: 11400000, guid: 7d34fc413f3914ea68f7cc2f8b434860, type: 2}
+  - {fileID: 11400000, guid: ed319dd0ad5a745e9adb45203e8c28e6, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

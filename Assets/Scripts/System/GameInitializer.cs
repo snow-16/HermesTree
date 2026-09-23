@@ -27,12 +27,21 @@ public class GameInitializer : MonoBehaviour
             _systemData.CheckingGamepad();
             InputSystem.onDeviceChange += _systemData.OnDeviceChanged;
 
-            var a = new SkillTreeData.ChartData().SetName("Test");
-            var c = new SkillTreeData.BranchCell();
-            a = a.AddCell(c);
-            var s = new SkillTreeData.BranchSwitch().AddCell(new SkillTreeData.BranchCell(), true).AddCell(new SkillTreeData.BranchCell(), false);
-            a = a.AddCell(s);
-            SkillTreeFiler.WriteChart(a);
+            DataManager.ReadData<PlayerGunData>().AddMagazine();
+
+            var testTree = new SkillTreeData.TreeData(0)
+            .SetName("Test")
+            .AddCell(0, DataManager.ReadData<CellDataBase>().CellList[CellType.SpeedUp])
+            .AddUnlocked(0);
+            DataManager.ReadData<SkillTreeData>().SetTree(testTree);
+
+            var testChart = new SkillTreeData.ChartData(0)
+            .SetName("Test")
+            .SetPerentTree(testTree)
+            .AddCell(new SkillTreeData.BranchCell(0));
+            DataManager.ReadData<SkillTreeData>().SetChart(testChart);
+
+            DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart);
         }
     }
 

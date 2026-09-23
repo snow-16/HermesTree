@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerGunData : IData
@@ -9,6 +11,13 @@ public class PlayerGunData : IData
     public Vector2 TargetPosition => _targetPosition;
     public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
+    private List<Magazine> _magazines = new();
+    public List<Magazine> Magazines => _magazines;
+    public Magazine SelectedMagazine => _magazines[_selectedMagazineNumber];
+
+    private int _selectedMagazineNumber;
+    public int SelectedMagazineNumber => _selectedMagazineNumber;
+
     public void SetAiming(bool isAiming)
     {
         _isAiming = isAiming;
@@ -17,5 +26,40 @@ public class PlayerGunData : IData
     public void UpdatePosition(Vector2 pos)
     {
         _targetPosition = pos;
+    }
+
+    public void AddMagazine()
+    {
+        _magazines.Add(new());
+    }
+
+    public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
+    {
+        if(magazineNum < _magazines.Count - 1)
+        {
+            Debug.LogError($"マガジン番号{magazineNum}は不正です。");
+            return;
+        }
+
+        var magazine = _magazines[magazineNum];
+        magazine.bullets = bullet.ToList();
+        _magazines[magazineNum] = magazine;
+    }
+
+    public void UseMagazine()
+    {
+        var magazine = _magazines[_selectedMagazineNumber];
+        magazine.bullets.RemoveAt(magazine.bullets.Count - 1);
+        _magazines[_selectedMagazineNumber] = magazine;
+    }
+
+    public void SwitchMagazine(bool isRight)
+    {
+        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazines.Count);
+    }
+
+    public struct Magazine
+    {
+        public List<SkillTreeData.ChartData> bullets;
     }
 }

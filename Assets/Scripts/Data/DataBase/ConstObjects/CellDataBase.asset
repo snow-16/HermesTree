@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6af8c062b6c4497db0e6f64d4a9d527, type: 3}
-  m_Name: NormalBullet
-  m_EditorClassIdentifier: Assembly-CSharp::BulletSettingData
-  _baseSpeed: 20
+  m_Script: {fileID: 11500000, guid: 7a4dbc467d0db4516a4a91c28d6c84d9, type: 3}
+  m_Name: CellDataBase
+  m_EditorClassIdentifier: Assembly-CSharp::CellDataBase
+  _cellList:
+  - {fileID: 11400000, guid: 55236531f61ac4213b075135cf2507d0, type: 2}

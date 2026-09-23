@@ -11,27 +11,27 @@ public class SkillTreeData : IData
     private Dictionary<int, ChartData> _chartDatas = new();
     public Dictionary<int, ChartData> ChartDatas => _chartDatas;
 
-    public void SetTree(int id, TreeData data)
+    public void SetTree(TreeData data)
     {
-        if(_treeDatas.ContainsKey(id))
+        if(_treeDatas.ContainsKey(data.id))
         {
-            _treeDatas[id] = data;
+            _treeDatas[data.id] = data;
         }
         else
         {
-            _treeDatas.Add(id, data);
+            _treeDatas.Add(data.id, data);
         }
     }
 
-    public void SetChart(int id, ChartData data)
+    public void SetChart(ChartData data)
     {
-        if(_chartDatas.ContainsKey(id))
+        if(_chartDatas.ContainsKey(data.id))
         {
-            _chartDatas[id] = data;
+            _chartDatas[data.id] = data;
         }
         else
         {
-            _chartDatas.Add(id, data);
+            _chartDatas.Add(data.id, data);
         }
     }
 
@@ -57,6 +57,14 @@ public class SkillTreeData : IData
         public List<int> unlocked;
         public Dictionary<int, CellSettingData> cells;
 
+        public TreeData(int dataId)
+        {
+            id = dataId;
+            name = "";
+            unlocked = new();
+            cells = new();
+        }
+
         public TreeData SetName(string newName)
         {
             name = newName;
@@ -65,8 +73,6 @@ public class SkillTreeData : IData
 
         public TreeData AddUnlocked(int cellNumber)
         {
-            unlocked ??= new();
-
             if(unlocked.Contains(cellNumber))
             {
                 Debug.LogError($"{name}の{cellNumber}番は解放済みです。");
@@ -84,8 +90,6 @@ public class SkillTreeData : IData
 
         public TreeData AddCell(int cellNumber, CellSettingData cellData)
         {
-            cells ??= new();
-
             if(cells.ContainsKey(cellNumber))
             {
                 Debug.LogError($"{name}の{cellNumber}番は登録済みです。");
@@ -105,6 +109,14 @@ public class SkillTreeData : IData
         public int perentTreeId;
         public List<IBranchData> selected;
 
+        public ChartData(int dataId)
+        {
+            id = dataId;
+            name = "";
+            perentTreeId = default;
+            selected = new();
+        }
+
         public ChartData SetName(string newName)
         {
             name = newName;
@@ -119,7 +131,6 @@ public class SkillTreeData : IData
 
         public ChartData AddCell(IBranchData cell)
         {
-            selected ??= new();
             selected.Add(cell);
             return this;
         }
@@ -129,6 +140,11 @@ public class SkillTreeData : IData
     public struct BranchCell : IBranchData
     {
         public int cellNumber;
+
+        public BranchCell(int number)
+        {
+            cellNumber = number;
+        }
     }
 
     [Serializable]
@@ -137,9 +153,14 @@ public class SkillTreeData : IData
         public int cellNumber;
         public List<IBranchData> connected;
 
+        public BranchTrigger(int number)
+        {
+            cellNumber = number;
+            connected = new();
+        }
+
         public BranchTrigger AddCell(IBranchData cell)
         {
-            connected ??= new();
             connected.Add(cell);
             return this;
         }
@@ -152,16 +173,21 @@ public class SkillTreeData : IData
         public List<IBranchData> connectedTrue;
         public List<IBranchData> connectedFalse;
 
+        public BranchSwitch(int number)
+        {
+            cellNumber = number;
+            connectedTrue = new();
+            connectedFalse = new();
+        }
+
         public BranchSwitch AddCell(IBranchData cell, bool conditions)
         {
             if(conditions)
             {
-                connectedTrue ??= new();
                 connectedTrue.Add(cell);
             }
             else
             {
-                connectedFalse ??= new();
                 connectedFalse.Add(cell);
             }
 
