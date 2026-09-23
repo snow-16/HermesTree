@@ -12,7 +12,7 @@ public class PlayerGunData : IData
     public Vector2 TargetPosition => _targetPosition;
     public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
-    private MagazineData[] _magazineBases = new MagazineData[1];
+    private MagazineData[] _magazineBases = new MagazineData[0];
     public MagazineData[] MagazineBases => _magazineBases;
 
     private MagazineData _magazine = new();

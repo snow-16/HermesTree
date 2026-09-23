@@ -4,4 +4,5 @@
 public enum CellType
 {
     SpeedUp,
+    Reflection,
 }

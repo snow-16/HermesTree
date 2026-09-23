@@ -9,6 +9,12 @@ public class BulletData : InstanceData
     private float _acceleration;
     public float Acceleration => _acceleration;
 
+    private float _damage;
+    public float Damage => _damage;
+
+    private int _boundableCount;
+    public int BoundableCount => _boundableCount;
+
     public void ReFillProcessor(List<IBulletProcessor> processors)
     {
         if(!HasProcessor)
@@ -31,5 +37,15 @@ public class BulletData : InstanceData
     public void Accelarate(float addend)
     {
         _acceleration += addend;
+    }
+
+    public void AddBoundable(int count)
+    {
+        _boundableCount += count;
+    }
+
+    public void Bound()
+    {
+        _boundableCount--;
     }
 }

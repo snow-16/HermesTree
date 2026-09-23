@@ -57,6 +57,17 @@ public class BulletSimulator : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(gameObject);
+        if(_bulletData.BoundableCount > 0)
+        {
+            _bulletData.Bound();
+            
+            var normal = collision.contacts[0].normal;
+            var reflectVector = Vector2.Reflect(transform.up, normal);
+            transform.rotation = Quaternion.FromToRotation(transform.up, (Vector2)transform.position + reflectVector);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

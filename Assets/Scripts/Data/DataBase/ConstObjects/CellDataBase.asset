@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CellDataBase
   _cellList:
   - {fileID: 11400000, guid: 55236531f61ac4213b075135cf2507d0, type: 2}
+  - {fileID: 11400000, guid: 4c2af561867b64c0d9a0d328d1f3edd9, type: 2}
