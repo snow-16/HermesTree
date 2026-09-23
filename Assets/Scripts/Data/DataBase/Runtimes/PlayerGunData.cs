@@ -7,6 +7,7 @@ public class PlayerGunData : IData
 
     private Vector2 _targetPosition;
     public Vector2 TargetPosition => _targetPosition;
+    public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
     public void SetAiming(bool isAiming)
     {

@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerGunner : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _bulletPrefab;
+
     private PlayerDataBase _playerDataBase;
     private PlayerGunData _playerGunData;
     private PlayerMoveData _playerMoveData;
@@ -45,7 +48,9 @@ public class PlayerGunner : MonoBehaviour
     {
         if(_playerGunData.IsAiming)
         {
-            
+            var bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            bullet.transform.rotation = Quaternion.FromToRotation(Vector2.up, _playerGunData.WorldTargetPosition - (Vector2)bullet.transform.position);
+            bullet.GetComponent<Rigidbody2D>().AddForce(bullet.transform.up * 10, ForceMode2D.Impulse);
         }
     }
 
@@ -53,7 +58,7 @@ public class PlayerGunner : MonoBehaviour
     {
         if(_systemData.CurrentDevice is Gamepad ? _playerGunData.IsAiming : !_playerGunData.IsAiming)
         {
-            var targetPos = Camera.main.ScreenToWorldPoint((Vector3)_playerGunData.TargetPosition + new Vector3(0,0,-10));
+            var targetPos = _playerGunData.WorldTargetPosition;
             _playerMoveData.SetTeleportTarget(targetPos);
         }
     }
