@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,13 +8,11 @@ public abstract class CustomButton : MonoBehaviour,
 IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
-    protected Color _focusedColorOffset = Color.white;
-    [SerializeField]
-    protected Color _pressedColorOffset = Color.white;
+    private List<ColorSet> _colorSets = new();
     [SerializeField]
     protected Vector2 _pressedScaleOffset;
 
-    private Color _baseColor;
+    private int _colorSelected;
     private Vector2 _baseScale;
     protected bool _isFocused;
     protected bool _isPressed;
@@ -24,7 +24,6 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     void Awake()
     {
         _buttonImage = GetComponent<Image>();
-        _baseColor = _buttonImage.color;
         _baseScale = ((RectTransform)transform).sizeDelta;
     }
 
@@ -67,19 +66,24 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     {
         if(!_canPressing)
         {
-            ((RectTransform)transform).sizeDelta = _isPressed ? _baseScale - _pressedScaleOffset : _baseScale;
-            _buttonImage.color = _isPressed ? _pressedColorOffset : _focusedColorOffset;
+            ((RectTransform)transform).sizeDelta = _baseScale;
+            _buttonImage.color = _colorSets[_colorSelected].focusedColor;
         }
         else if(_isPressed)
         {
-            _buttonImage.color = _pressedColorOffset;
             ((RectTransform)transform).sizeDelta = _baseScale - _pressedScaleOffset;
+            _buttonImage.color = _colorSets[_colorSelected].pressedColor;
         }
         else
         {
             ((RectTransform)transform).sizeDelta = _baseScale;
-            _buttonImage.color = _isFocused ? _focusedColorOffset : _baseColor;
+            _buttonImage.color = _isFocused ? _colorSets[_colorSelected].focusedColor : _colorSets[_colorSelected].baseColor;
         }
+    }
+
+    protected void ChangeColorSet(int index)
+    {
+        _colorSelected = index;
     }
 
     public void EnablePress()
@@ -92,5 +96,13 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     {
         _canPressing = false;
         DrawButton();
+    }
+
+    [Serializable]
+    public struct ColorSet
+    {
+        public Color baseColor;
+        public Color focusedColor;
+        public Color pressedColor;
     }
 }
