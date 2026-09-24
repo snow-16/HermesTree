@@ -29,24 +29,6 @@ public class GameInitializer : MonoBehaviour
 
             ReadData();
 
-            // var testTree = new SkillTreeData.TreeData(0)
-            // .SetName("Test")
-            // .AddCell(0, new(CellType.SpeedUp, new(){1}))
-            // .AddCell(1, new(CellType.Reflection, new(){2}))
-            // .AddCell(2, new(CellType.Gunpowder))
-            // .AddUnlocked(0)
-            // .AddUnlocked(1)
-            // .AddUnlocked(2);
-            // DataManager.ReadData<SkillTreeData>().SetTree(testTree);
-
-            // var testChart = new SkillTreeData.ChartData(0)
-            // .SetName("Test")
-            // .SetPerentTree(testTree)
-            // .AddCell(new SkillTreeData.BranchCell(0))
-            // .AddCell(new SkillTreeData.BranchCell(1))
-            // .AddCell(new SkillTreeData.BranchCell(2));
-            // DataManager.ReadData<SkillTreeData>().SetChart(testChart);
-
             // DataManager.ReadData<PlayerGunData>().AddMagazine(3);
             // DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
         }
@@ -75,5 +57,6 @@ public class GameInitializer : MonoBehaviour
     {
         var skillTreeData = DataManager.ReadData<SkillTreeData>();
         SkillTreeFiler.ReadAllTrees().ForEach(tree => skillTreeData.SetTree(tree));
+        SkillTreeFiler.ReadAllCharts().ForEach(chart => skillTreeData.SetChart(chart));
     }
 }
