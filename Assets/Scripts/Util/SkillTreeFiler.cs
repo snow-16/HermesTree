@@ -21,7 +21,7 @@ public static class SkillTreeFiler
         }
 
         var json = JsonConvert.SerializeObject(data, Formatting.Indented, _serializerSettings);
-        string filePath = Path.Combine(saveDirectory, $"{data.name}.json");
+        string filePath = Path.Combine(saveDirectory, $"{data.id}.json");
         File.WriteAllText(filePath, json);
         Debug.Log($"{filePath}に{data.name}をスキルツリーファイルとして保存しました。");
     }

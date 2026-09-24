@@ -1,5 +1,7 @@
 using System.Linq;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class SkillTreeBuilder : MonoBehaviour
 {
@@ -9,14 +11,33 @@ public class SkillTreeBuilder : MonoBehaviour
     private Transform _cellsPerent;
     [SerializeField]
     private Transform _connectersPerent;
+    [SerializeField]
+    private TMP_InputField _treeNameField;
 
     private SkillTreeData.TreeData? _treeBuilder;
 
+    private SkillTreeDataBase _skillTreeDataBase;
     private SkillTreeData _skillTreeData;
 
     void Start()
     {
+        _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
+    }
+
+    public void CreateTree()
+    {
+        var usedIds = _skillTreeData.TreeDatas.Select(tree => tree.Key).ToList();
+        var id = Enumerable.Range(0, _skillTreeData.TreeDatas.Count + 1).Except(usedIds).ToList().First();
+        _treeBuilder = new SkillTreeData.TreeData(id);
+        _skillTreeData.SetTree(_treeBuilder.Value);
+
+        var sideLength = 1 + (_skillTreeDataBase.LayerCount - 1) * 2;
+        var offset = _skillTreeDataBase.LayerCount - 1;
+        for(int i = 0; i < sideLength * sideLength; i++)
+        {
+            BuildCell(id, new(i % sideLength - offset, i / sideLength - offset), new(CellType.SpeedUp), AddCell);
+        }
     }
 
     public void OpenTree(int id)
@@ -25,17 +46,16 @@ public class SkillTreeBuilder : MonoBehaviour
 
         _treeBuilder?.cells.ToList().ForEach(cell =>
         {
-            var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
-            cellBuilder.AddClickAction(UnlockCell);
-            cellBuilder.Initialize(id, cell.Key, cell.Value, _connectersPerent);
-            cellBuilder.transform.SetParent(_cellsPerent);
+            BuildCell(id, cell.Key, cell.Value, UnlockCell);
         });
     }
 
-    public void StartCreateTree(int id)
+    private void BuildCell(int id, SimplePosition cellPosition, SkillTreeData.CellData cellData, Action<SimplePosition, SkillTreeData.CellData> action)
     {
-        _treeBuilder = new(id);
-        _treeBuilder?.SetName("Test");
+        var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
+        cellBuilder.AddClickAction(action);
+        cellBuilder.Initialize(id, cellPosition, cellData, _connectersPerent);
+        cellBuilder.transform.SetParent(_cellsPerent);
     }
 
     public void AddCell(SimplePosition cellPosition, SkillTreeData.CellData cellData)
@@ -52,7 +72,8 @@ public class SkillTreeBuilder : MonoBehaviour
     {
         if(_treeBuilder != null)
         {
-            DataManager.ReadData<SkillTreeData>().SetTree(_treeBuilder.Value);
+            _treeBuilder?.SetName(_treeNameField.text);
+            _skillTreeData.SetTree(_treeBuilder.Value);
             SkillTreeFiler.WriteTree(_treeBuilder.Value);
             _treeBuilder = null;
         }
