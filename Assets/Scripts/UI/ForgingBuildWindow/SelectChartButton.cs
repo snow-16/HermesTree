@@ -18,7 +18,7 @@ public class SelectChartButton : CustomButton
     public void SetChart(SkillTreeData.ChartData data)
     {
         _chartId = data.id;
-        GetComponent<TextMeshProUGUI>().text = data.name;
+        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.name;
     }
 }
 
