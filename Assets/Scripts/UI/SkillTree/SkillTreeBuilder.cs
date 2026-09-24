@@ -15,14 +15,34 @@ public class SkillTreeBuilder : MonoBehaviour
     private TMP_InputField _treeNameField;
 
     private SkillTreeData.TreeData? _treeBuilder;
+    private SkillTreeData.ChartData? _chartBuilder;
 
     private SkillTreeDataBase _skillTreeDataBase;
     private SkillTreeData _skillTreeData;
 
-    void Start()
+    public void OpenMenu(ForgingMenuBuilder.MenuBuilder builder)
     {
         _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
+
+        if(builder.isTree)
+        {
+            _treeBuilder = _skillTreeData.TreeDatas[builder.treeId];
+            OpenTree(_treeBuilder.Value);
+        }
+        else
+        {
+            _chartBuilder = _skillTreeData.ChartDatas[builder.chartId];
+            OpenTree(_skillTreeData.TreeDatas[_chartBuilder.Value.perentTreeId]);
+        }
+    }
+
+    private void OpenTree(SkillTreeData.TreeData tree)
+    {
+        tree.cells.ToList().ForEach(cell =>
+        {
+            BuildCell(tree.id, cell.Key, cell.Value, UnlockCell);
+        });
     }
 
     public void CreateTree()

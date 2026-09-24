@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ForgingMenuBuilder : MonoBehaviour
 {
+    [SerializeField]
+    private OpenForgeMenuEvent _onOpenForge;
+    [SerializeField]
+    private GameObject _forgeMenu;
     [SerializeField]
     private GameObject _mainWindow;
     [SerializeField]
@@ -55,7 +61,7 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public void NewTree()
     {
-        _builder.createNew = false;
+        _builder.createNew = true;
         var usedIds = _skillTreeData.TreeDatas.Select(tree => tree.Key).ToList();
         var newId = Enumerable.Range(0, _skillTreeData.TreeDatas.Count + 1).Except(usedIds).ToList().First();
         _builder.treeId = newId;
@@ -65,14 +71,14 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public void ReBuildTree()
     {
-        _builder.createNew = true;
+        _builder.createNew = false;
 
         SwitchWindow(_selectTreeWindow);
     }
 
     public void NewChart()
     {
-        _builder.createNew = false;
+        _builder.createNew = true;
         var usedIds = _skillTreeData.ChartDatas.Select(chart => chart.Key).ToList();
         var newId = Enumerable.Range(0, _skillTreeData.ChartDatas.Count + 1).Except(usedIds).ToList().First();
         _builder.chartId = newId;
@@ -82,7 +88,7 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public void ReBuildChart()
     {
-        _builder.createNew = true;
+        _builder.createNew = false;
 
         SwitchWindow(_selectChartWindow);
     }
@@ -138,6 +144,9 @@ public class ForgingMenuBuilder : MonoBehaviour
                 _skillTreeData.SetChart(newChart);
             }
         }
+
+        _forgeMenu.SetActive(true);
+        _onOpenForge?.Invoke(_builder);
     }
 
     public void BackWindow()
@@ -154,7 +163,7 @@ public class ForgingMenuBuilder : MonoBehaviour
         _windowTransition.Last().SetActive(true);
     }
 
-    private struct MenuBuilder
+    public struct MenuBuilder
     {
         public bool isTree;
         public bool createNew;
@@ -163,3 +172,6 @@ public class ForgingMenuBuilder : MonoBehaviour
         public int chartId;
     }
 }
+
+[Serializable]
+public class OpenForgeMenuEvent : UnityEvent<ForgingMenuBuilder.MenuBuilder>{}
