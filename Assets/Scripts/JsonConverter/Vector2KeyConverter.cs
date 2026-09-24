@@ -52,7 +52,7 @@ public class Vector2KeyConverter : JsonConverter
         foreach(DictionaryEntry entry in dictionary)
         {
             var key = (Vector2)entry.Key;
-            writer.WritePropertyName($"({key.x:F2}, {key:F2})");
+            writer.WritePropertyName($"({key.x:F2}, {key.y:F2})");
             serializer.Serialize(writer, entry.Value);
         }
 
