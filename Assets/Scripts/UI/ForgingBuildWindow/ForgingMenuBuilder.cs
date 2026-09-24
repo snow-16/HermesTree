@@ -22,17 +22,21 @@ public class ForgingMenuBuilder : MonoBehaviour
     private GameObject _selectTreeWindow;
     [SerializeField]
     private GameObject _selectChartWindow;
+    [SerializeField]
+    private GameObject _fillMagazineWindow;
     
     private MenuBuilder _builder;
     private List<GameObject> _windowTransition;
 
     private BulletDataBase _bulletDataBase;
     private SkillTreeData _skillTreeData;
+    private PlayerGunData _playerGunData;
 
     void Start()
     {
         _bulletDataBase = DataManager.ReadData<BulletDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
+        _playerGunData = DataManager.ReadData<PlayerGunData>();
 
         OpenBuilder();
     }
@@ -47,16 +51,25 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public void BuildTree()
     {
-        _builder.isTree = true;
+        _builder.menuType = ForgeType.Tree;
 
         SwitchWindow(_buildTreeWindow);
     }
 
     public void BuildChart()
     {
-        _builder.isTree = false;
+        _builder.menuType = ForgeType.Chart;
 
         SwitchWindow(_buildChartWindow);
+    }
+
+    public void BuildMagazine()
+    {
+        _builder.menuType = ForgeType.Magazine;
+        _builder.magazine = new SkillTreeData.ChartData[3];
+        _builder.magazineCaseIndex = 0;
+
+        SwitchWindow(_fillMagazineWindow);
     }
 
     public void NewTree()
@@ -111,21 +124,60 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public void SelectChart(int id)
     {
-        _builder.chartId = id;
-        OpenForge();
+        if(_builder.menuType == ForgeType.Chart)
+        {
+            _builder.chartId = id;
+            OpenForge();
 
-        _windowTransition.Last().SetActive(false);
+            _windowTransition.Last().SetActive(false);
+        }
+        else if(_builder.menuType == ForgeType.Magazine)
+        {
+            var chart = _skillTreeData.ChartDatas[id];
+            _builder.magazine[_builder.magazineCaseIndex] = chart;
+            Debug.Log($"弾倉{_builder.magazineCaseIndex}番に{chart.name}を装填しました。");
+        }
+    }
+
+    public void SelectInMagazineIndex(int index)
+    {
+        if(index < _builder.magazine.Length)
+        {
+            _builder.magazineCaseIndex = index;
+        }
+        else
+        {
+            Debug.LogError($"装弾番号{index}はマガジンサイズを超過しています。");
+        }
+    }
+
+    public void SaveMagazine()
+    {
+        if(!_builder.magazine.Contains(null))
+        {
+            _playerGunData.SetMagazine(0, _builder.magazine);
+            Debug.Log($"装弾数{_builder.magazine.Length}のマガジンを保存しました。");
+        }
+        else
+        {
+            Debug.LogError($"装弾数が足りません。");
+        }
     }
 
     public void OpenForge()
     {
-        if(_builder.isTree)
+        if(_builder.menuType == ForgeType.Tree)
         {
             Debug.Log($"ID{_builder.treeId}番の{_builder.bulletType}用ツリー構築メニューを開きます。");
         }
-        else
+        else if(_builder.menuType == ForgeType.Chart)
         {
             Debug.Log($"ID{_builder.chartId}番の{_builder.treeId}番ツリー用チャート構築メニューを開きます。");
+        }
+        else
+        {
+            Debug.LogError("マガジン装填メニューでツリーを展開することはできません。");
+            return;
         }
 
         _forgeMenu.SetActive(true);
@@ -154,11 +206,13 @@ public class ForgingMenuBuilder : MonoBehaviour
 
     public struct MenuBuilder
     {
-        public bool isTree;
+        public ForgeType menuType;
         public bool createNew;
         public BulletType bulletType;
         public int treeId;
         public int chartId;
+        public int magazineCaseIndex;
+        public SkillTreeData.ChartData[] magazine;
     }
 }
 

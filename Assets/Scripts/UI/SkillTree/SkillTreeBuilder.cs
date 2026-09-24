@@ -26,7 +26,7 @@ public class SkillTreeBuilder : MonoBehaviour
         _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
 
-        isTree = builder.isTree;
+        isTree = builder.menuType == ForgeType.Tree;
         if(isTree)
         {
             if(builder.createNew)

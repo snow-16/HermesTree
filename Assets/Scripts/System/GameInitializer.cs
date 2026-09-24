@@ -29,8 +29,7 @@ public class GameInitializer : MonoBehaviour
 
             ReadData();
 
-            // DataManager.ReadData<PlayerGunData>().AddMagazine(3);
-            // DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
+            DataManager.ReadData<PlayerGunData>().AddMagazine(1);
         }
     }
 

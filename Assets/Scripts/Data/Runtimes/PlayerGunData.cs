@@ -12,8 +12,8 @@ public class PlayerGunData : IData
     public Vector2 TargetPosition => _targetPosition;
     public Vector2 WorldTargetPosition => Camera.main.ScreenToWorldPoint((Vector3)_targetPosition + new Vector3(0,0,-10));
 
-    private MagazineData[] _magazineBases = new MagazineData[0];
-    public MagazineData[] MagazineBases => _magazineBases;
+    private List<MagazineData> _magazineBases = new();
+    public List<MagazineData> MagazineBases => _magazineBases;
 
     private MagazineData _magazine = new();
     public MagazineData Magazine => _magazine;
@@ -35,12 +35,12 @@ public class PlayerGunData : IData
 
     public void AddMagazine(int addend)
     {
-        Array.Resize(ref _magazineBases, _magazineBases.Length + addend);
+        _magazineBases.AddRange(Enumerable.Repeat(new MagazineData(true), addend));
     }
 
     public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
     {
-        if(magazineNum > _magazineBases.Length - 1)
+        if(magazineNum > _magazineBases.Count - 1)
         {
             Debug.LogError($"マガジン番号{magazineNum}は不正です。");
             return;
@@ -64,16 +64,16 @@ public class PlayerGunData : IData
 
     public void SwitchMagazine(bool isRight)
     {
-        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazineBases.Length);
+        _selectedMagazineNumber = (int)Mathf.Repeat(_selectedMagazineNumber + (isRight ? 1 : -1), _magazineBases.Count);
     }
 
     public struct MagazineData
     {
         public List<SkillTreeData.ChartData> bullets;
 
-        public MagazineData(int bulletCount)
+        public MagazineData(bool dummy)
         {
-            bullets = new(new SkillTreeData.ChartData[bulletCount]);
+            bullets = new();
         }
 
         public MagazineData Clone()
