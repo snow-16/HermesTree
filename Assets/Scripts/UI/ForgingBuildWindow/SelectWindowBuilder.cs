@@ -8,12 +8,22 @@ where T : CustomButton
 
     protected GameObject _buttonBase;
 
-    void Start()
+    void OnEnable()
     {
         _buttonBase = _buttonLine.GetChild(0).gameObject;
         _buttonBase.SetActive(false);
-
         Build();
+    }
+
+    void OnDisable()
+    {
+        foreach(Transform child in _buttonLine)
+        {
+            if(child.gameObject != _buttonBase)
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
 
     protected abstract void Build();
