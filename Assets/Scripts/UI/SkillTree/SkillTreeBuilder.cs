@@ -38,7 +38,7 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _treeBuilder.name;
-            OpenTree(_treeBuilder, UnlockCell);
+            OpenTree(true, _treeBuilder, UnlockCell);
         }
         else
         {
@@ -57,23 +57,23 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _chartBuilder.name;
-            OpenTree(_skillTreeData.TreeDatas[_chartBuilder.perentTreeId], SelectCell);
+            OpenTree(false, _skillTreeData.TreeDatas[_chartBuilder.perentTreeId], SelectCell);
         }
     }
 
-    private void OpenTree(SkillTreeData.TreeData tree, Action<SimplePosition, SkillTreeData.CellData> action)
+    private void OpenTree(bool isTree, SkillTreeData.TreeData tree, Action<SimplePosition, SkillTreeData.CellData> action)
     {
         tree.cells.ToList().ForEach(cell =>
         {
-            BuildCell(tree, cell.Key, cell.Value, action);
+            BuildCell(isTree, tree, cell.Key, cell.Value, action);
         });
     }
 
-    private void BuildCell(SkillTreeData.TreeData tree, SimplePosition cellPosition, SkillTreeData.CellData cellData, Action<SimplePosition, SkillTreeData.CellData> action)
+    private void BuildCell(bool isTree, SkillTreeData.TreeData tree, SimplePosition cellPosition, SkillTreeData.CellData cellData, Action<SimplePosition, SkillTreeData.CellData> action)
     {
         var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
         cellBuilder.AddClickAction(action);
-        cellBuilder.Initialize(_treeBuilder != null, tree, _chartBuilder, cellPosition, cellData, _connectersPerent);
+        cellBuilder.Initialize(isTree, tree, _chartBuilder, cellPosition, cellData, _connectersPerent);
         cellBuilder.transform.SetParent(_cellsPerent);
     }
 

@@ -80,7 +80,7 @@ public class CellButton : CustomButton
         var isUnlocked = _treeData.IsCellUnlocked(new(_cellPosition));
         var isSelectable = _chartData.CanSelecting(new(_cellPosition));
 
-        if(!isSelectable)
+        if(!isSelectable || !isUnlocked)
         {
             DisablePress();
         }
@@ -89,17 +89,17 @@ public class CellButton : CustomButton
             EnablePress();
         }
 
-        if(isSelected)
+        if(!isUnlocked)
+        {
+            ChangeColorSet(4);
+        }
+        else if(isSelected)
         {
             ChangeColorSet(1);
         }
         else if(isSelectable)
         {
             ChangeColorSet(3);
-        }
-        else if(isUnlocked)
-        {
-            ChangeColorSet(4);
         }
         else
         {
@@ -126,11 +126,11 @@ public class CellButton : CustomButton
         _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(bool isTreeBuilding, SkillTreeData.TreeData treeData, SkillTreeData.ChartData chartData, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
+    public void Initialize(bool isTreeBuilding, SkillTreeData.TreeData tree, SkillTreeData.ChartData chart, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
     {
         _isTreeBuilding = isTreeBuilding;
-        _treeData = treeData;
-        _chartData = chartData;
+        _treeData = tree;
+        _chartData = chart;
         _cellPosition = pos.ConvertVector();
         _cellData = data;
         _connectersPerent = connectersPerent;
