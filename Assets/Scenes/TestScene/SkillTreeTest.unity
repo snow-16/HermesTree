@@ -762,7 +762,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1489438733}
         m_TargetAssemblyTypeName: SkillTreeBuilder, Assembly-CSharp
         m_MethodName: SetTree
         m_Mode: 1

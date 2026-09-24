@@ -23,7 +23,7 @@ public class SkillTreeBuilder : MonoBehaviour
         {
             var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
             cellBuilder.AddClickAction(UnlockCell);
-            cellBuilder.Initialize(cell.Key, cell.Value);
+            cellBuilder.Initialize(id, cell.Key, cell.Value);
             cellBuilder.transform.SetParent(transform);
         });
     }

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SkillTreeDataBase
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeDataBase
   _layerCount: 5
-  _layerMargin: 130
+  _layerMargin: 150

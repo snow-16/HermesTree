@@ -16,6 +16,8 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     private Vector2 _baseScale;
     protected bool _isFocused;
     protected bool _isPressed;
+    private bool _canPressing = true;
+    public bool CanPressing => _canPressing;
 
     protected Image _buttonImage;
 
@@ -30,7 +32,10 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick();
+        if(_canPressing)
+        {
+            OnClick();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -60,7 +65,12 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
 
     private void DrawButton()
     {
-        if(_isPressed)
+        if(!_canPressing)
+        {
+            ((RectTransform)transform).sizeDelta = _isPressed ? _baseScale - _pressedScaleOffset : _baseScale;
+            _buttonImage.color = _isPressed ? _pressedColorOffset : _focusedColorOffset;
+        }
+        else if(_isPressed)
         {
             _buttonImage.color = _pressedColorOffset;
             ((RectTransform)transform).sizeDelta = _baseScale - _pressedScaleOffset;
@@ -70,5 +80,17 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
             ((RectTransform)transform).sizeDelta = _baseScale;
             _buttonImage.color = _isFocused ? _focusedColorOffset : _baseColor;
         }
+    }
+
+    public void EnablePress()
+    {
+        _canPressing = true;
+        DrawButton();
+    }
+
+    public void DisablePress()
+    {
+        _canPressing = false;
+        DrawButton();
     }
 }

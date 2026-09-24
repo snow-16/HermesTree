@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,27 +7,40 @@ public class CellButton : CustomButton
     [SerializeField]
     private CellButtonEvent _onClicked;
     [SerializeField]
-    private Vector2 _cellPosition;
-    [SerializeField]
-    private CellType _cellType;
-    [SerializeField]
-    private List<Vector2> _connectedCells = new();
-    [SerializeField]
     private GameObject _cellConnecterPrefab;
 
+    private int _treeId;
+    private Vector2 _cellPosition;
+    private SkillTreeData.CellData _cellData;
+
     private SkillTreeDataBase _skillTreeDataBase;
+    private SkillTreeData _skillTreeData;
 
     void Start()
     {
         _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
+        _skillTreeData = DataManager.ReadData<SkillTreeData>();
+
         ((RectTransform)transform).anchoredPosition = _cellPosition * _skillTreeDataBase.LayerMargin;
 
-        _connectedCells.ForEach(cellPosition =>
+        _cellData.connectedCells.ForEach(cellPosition =>
         {
             var distance = cellPosition - _cellPosition;
             var joint = CreateConnecter(transform, new Vector2(distance.x, 0), (int)distance.x);
             CreateConnecter(joint, new Vector2(0, distance.y), (int)distance.y);
         });
+    }
+
+    void Update()
+    {
+        if(_skillTreeData.TreeDatas[_treeId].unlocked.Contains(_cellPosition))
+        {
+            DisablePress();
+        }
+        else
+        {
+            EnablePress();
+        }
     }
 
     private Transform CreateConnecter(Transform joint, Vector2 direction, int length)
@@ -56,14 +68,14 @@ public class CellButton : CustomButton
 
     protected override void OnClick()
     {
-        _onClicked?.Invoke(_cellPosition, new(_cellType, _connectedCells));
+        _onClicked?.Invoke(_cellPosition, _cellData);
     }
 
-    public void Initialize(Vector2 pos, SkillTreeData.CellData data)
+    public void Initialize(int treeId, Vector2 pos, SkillTreeData.CellData data)
     {
+        _treeId = treeId;
         _cellPosition = pos;
-        _cellType = data.cellType;
-        _connectedCells = data.connectedCells;
+        _cellData = data;
     }
 
     public void AddClickAction(Action<Vector2, SkillTreeData.CellData> action)
