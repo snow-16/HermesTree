@@ -1,5 +1,4 @@
 using UnityEngine;
-using MackySoft;
 
 [CreateAssetMenu(fileName = "CellSettingData", menuName = "Scriptable Objects/CellSettingData")]
 public class CellSettingData : DataBase
