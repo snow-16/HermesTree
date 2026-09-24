@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6af8c062b6c4497db0e6f64d4a9d527, type: 3}
   m_Name: NormalBullet
   m_EditorClassIdentifier: Assembly-CSharp::BulletSettingData
+  _baseTree: {fileID: 4900000, guid: ae07c523a183540d69e5be76ff137a98, type: 3}
   _baseSpeed: 20
   _baseDamage: 1
   _baseBoundable: 0

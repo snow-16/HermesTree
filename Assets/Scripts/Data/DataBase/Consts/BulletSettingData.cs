@@ -4,6 +4,10 @@ using UnityEngine;
 public class BulletSettingData : DataBase
 {
     [SerializeField]
+    private TextAsset _baseTree;
+    public TextAsset BaseTree => _baseTree;
+
+    [SerializeField]
     private float _baseSpeed;
     public float BaseSpeed => _baseSpeed;
 

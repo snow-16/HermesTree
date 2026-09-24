@@ -10,7 +10,7 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     [SerializeField]
     private List<ColorSet> _colorSets = new();
     [SerializeField]
-    protected Vector2 _pressedScaleOffset;
+    protected float _pressedScaleMultiplier;
 
     private int _colorSelected;
     private Vector2 _baseScale;
@@ -71,7 +71,9 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
         }
         else if(_isPressed)
         {
-            ((RectTransform)transform).sizeDelta = _baseScale - _pressedScaleOffset;
+            var rect = (RectTransform)transform;
+            var offset = (rect.sizeDelta.x < rect.sizeDelta.y ? rect.sizeDelta.x : rect.sizeDelta.y) * (1 - _pressedScaleMultiplier);
+            rect.sizeDelta = _baseScale - new Vector2(offset, offset);
             _buttonImage.color = _colorSets[_colorSelected].pressedColor;
         }
         else

@@ -74,6 +74,6 @@ public class GameInitializer : MonoBehaviour
     private void ReadData()
     {
         var skillTreeData = DataManager.ReadData<SkillTreeData>();
-        SkillTreeFiler.ReadTree().ForEach(tree => skillTreeData.SetTree(tree));
+        SkillTreeFiler.ReadAllTrees().ForEach(tree => skillTreeData.SetTree(tree));
     }
 }

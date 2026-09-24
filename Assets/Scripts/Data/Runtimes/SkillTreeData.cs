@@ -65,6 +65,12 @@ public class SkillTreeData : IData
             cells = new();
         }
 
+        public TreeData SetId(int newId)
+        {
+            id = newId;
+            return this;
+        }
+
         public TreeData SetName(string newName)
         {
             name = newName;

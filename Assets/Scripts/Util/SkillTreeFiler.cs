@@ -26,7 +26,21 @@ public static class SkillTreeFiler
         Debug.Log($"{filePath}に{data.name}をスキルツリーファイルとして保存しました。");
     }
 
-    public static List<SkillTreeData.TreeData> ReadTree()
+    public static SkillTreeData.TreeData ReadTreeFromText(string text)
+    {
+        var treeData = JsonConvert.DeserializeObject<SkillTreeData.TreeData>(text, _serializerSettings);
+        Debug.Log($"{treeData.name}をデシリアライズ");
+        return treeData;
+    }
+
+    public static SkillTreeData.TreeData ReadTree(string file)
+    {
+        var data = ReadTreeFromText(File.ReadAllText(file));
+        Debug.Log($"{file}から{data.name}をスキルツリーファイルとしてロードしました。");
+        return data;
+    }
+
+    public static List<SkillTreeData.TreeData> ReadAllTrees()
     {
         var saveDirectory = Path.Combine(Application.persistentDataPath, "Tree");
         if(!Directory.Exists(saveDirectory))
@@ -35,13 +49,7 @@ public static class SkillTreeFiler
         }
 
         var allTrees = Directory.GetFiles(saveDirectory, "*", SearchOption.TopDirectoryOnly).Where(file => Path.GetExtension(file) == ".json");
-        return allTrees.ToList().Select(tree =>
-        {
-            var treeText = File.ReadAllText(tree);
-            var treeData = JsonConvert.DeserializeObject<SkillTreeData.TreeData>(treeText, _serializerSettings);
-            Debug.Log($"{tree}から{treeData.name}をスキルツリーファイルとしてロードしました。");
-            return treeData;
-        }).ToList();
+        return allTrees.ToList().Select(ReadTree).ToList();
     }
 
     public static void WriteChart(SkillTreeData.ChartData data)
