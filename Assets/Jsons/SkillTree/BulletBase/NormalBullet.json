@@ -26,7 +26,7 @@
       ]
     },
     "(0, 1)": {
-      "cellType": 0,
+      "cellType": 1,
       "connectFrom": {
         "x": 0,
         "y": 0
@@ -43,7 +43,7 @@
       ]
     },
     "(0, 2)": {
-      "cellType": 0,
+      "cellType": 2,
       "connectFrom": {
         "x": 0,
         "y": 1
@@ -51,7 +51,7 @@
       "connectedCells": []
     },
     "(1, 1)": {
-      "cellType": 0,
+      "cellType": 4,
       "connectFrom": {
         "x": 0,
         "y": 0
@@ -59,7 +59,7 @@
       "connectedCells": []
     },
     "(-1, 2)": {
-      "cellType": 0,
+      "cellType": 3,
       "connectFrom": {
         "x": 0,
         "y": 1
