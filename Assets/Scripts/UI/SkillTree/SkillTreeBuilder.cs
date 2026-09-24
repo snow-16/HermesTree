@@ -14,6 +14,7 @@ public class SkillTreeBuilder : MonoBehaviour
     [SerializeField]
     private TMP_InputField _treeNameField;
 
+    private bool isTree;
     private SkillTreeData.TreeData _treeBuilder;
     private SkillTreeData.ChartData _chartBuilder;
 
@@ -25,7 +26,8 @@ public class SkillTreeBuilder : MonoBehaviour
         _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
 
-        if(builder.isTree)
+        isTree = builder.isTree;
+        if(isTree)
         {
             if(builder.createNew)
             {
@@ -38,7 +40,7 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _treeBuilder.name;
-            OpenTree(true, _treeBuilder, UnlockCell);
+            OpenTree(_treeBuilder, UnlockCell);
         }
         else
         {
@@ -57,19 +59,19 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _chartBuilder.name;
-            OpenTree(false, _skillTreeData.TreeDatas[_chartBuilder.perentTreeId], SelectCell);
+            OpenTree(_skillTreeData.TreeDatas[_chartBuilder.perentTreeId], SelectCell);
         }
     }
 
-    private void OpenTree(bool isTree, SkillTreeData.TreeData tree, Action<SimplePosition, SkillTreeData.CellData> action)
+    private void OpenTree(SkillTreeData.TreeData tree, Action<SimplePosition, SkillTreeData.CellData> action)
     {
         tree.cells.ToList().ForEach(cell =>
         {
-            BuildCell(isTree, tree, cell.Key, cell.Value, action);
+            BuildCell(tree, cell.Key, cell.Value, action);
         });
     }
 
-    private void BuildCell(bool isTree, SkillTreeData.TreeData tree, SimplePosition cellPosition, SkillTreeData.CellData cellData, Action<SimplePosition, SkillTreeData.CellData> action)
+    private void BuildCell(SkillTreeData.TreeData tree, SimplePosition cellPosition, SkillTreeData.CellData cellData, Action<SimplePosition, SkillTreeData.CellData> action)
     {
         var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
         cellBuilder.AddClickAction(action);
@@ -99,7 +101,7 @@ public class SkillTreeBuilder : MonoBehaviour
             Debug.LogError("名前を入力してください。");
         }
 
-        if(_treeBuilder != null)
+        if(isTree)
         {
             _treeBuilder = _treeBuilder?.SetName(_treeNameField.text);
             _skillTreeData.SetTree(_treeBuilder);
