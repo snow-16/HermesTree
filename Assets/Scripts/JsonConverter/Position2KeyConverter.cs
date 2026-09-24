@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class Vector2KeyConverter : JsonConverter
+public class Position2KeyConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)
     {
         return objectType.IsGenericType &&
         objectType.GetGenericTypeDefinition() == typeof(Dictionary<,>) &&
-        objectType.GetGenericArguments()[0] == typeof(Vector2);
+        objectType.GetGenericArguments()[0] == typeof(SimplePosition);
     }
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
         var valueType = objectType.GetGenericArguments()[1];
-        var dictionaryType = typeof(Dictionary<,>).MakeGenericType(typeof(Vector2), valueType);
+        var dictionaryType = typeof(Dictionary<,>).MakeGenericType(typeof(SimplePosition), valueType);
         var dictionary = (IDictionary)Activator.CreateInstance(dictionaryType);
 
         if(reader.TokenType == JsonToken.StartObject)
@@ -30,14 +30,14 @@ public class Vector2KeyConverter : JsonConverter
                 }
 
                 //Keyを変換
-                var vectorKey = reader.Value.ToString();
-                var vector = Key2Vector2(vectorKey);
+                var positionKey = reader.Value.ToString();
+                var position = Key2Position(positionKey);
 
                 //Valueを読んで変換
                 reader.Read();
                 var value = serializer.Deserialize(reader, valueType);
 
-                dictionary.Add(vector, value);
+                dictionary.Add(position, value);
             }
         }
 
@@ -51,25 +51,25 @@ public class Vector2KeyConverter : JsonConverter
 
         foreach(DictionaryEntry entry in dictionary)
         {
-            var key = (Vector2)entry.Key;
-            writer.WritePropertyName($"({key.x:F2}, {key.y:F2})");
+            var key = (SimplePosition)entry.Key;
+            writer.WritePropertyName($"({key.x}, {key.y})");
             serializer.Serialize(writer, entry.Value);
         }
 
         writer.WriteEndObject();
     }
 
-    private Vector2 Key2Vector2(string key)
+    private SimplePosition Key2Position(string key)
     {
         key = key.Trim('(', ')', ' ');
         string[] split = key.Split(',');
 
         if (split.Length == 2 && 
-        float.TryParse(split[0], out float x) && 
-        float.TryParse(split[1], out float y))
+        int.TryParse(split[0], out int x) && 
+        int.TryParse(split[1], out int y))
         {
-            return new Vector2(x, y);
+            return new SimplePosition(x, y);
         }
-        return Vector2.zero;
+        return new(0, 0);
     }
 }

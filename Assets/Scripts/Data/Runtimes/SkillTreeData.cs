@@ -54,8 +54,8 @@ public class SkillTreeData : IData
     {
         public int id;
         public string name;
-        public List<Vector2> unlocked;
-        public Dictionary<Vector2, CellData> cells;
+        public List<SimplePosition> unlocked;
+        public Dictionary<SimplePosition, CellData> cells;
 
         public TreeData(int dataId)
         {
@@ -71,7 +71,7 @@ public class SkillTreeData : IData
             return this;
         }
 
-        public TreeData AddUnlocked(Vector2 cellPosition)
+        public TreeData AddUnlocked(SimplePosition cellPosition)
         {
             if(unlocked.Contains(cellPosition))
             {
@@ -88,7 +88,7 @@ public class SkillTreeData : IData
             return this;
         }
 
-        public TreeData AddCell(Vector2 cellPosition, CellData data)
+        public TreeData AddCell(SimplePosition cellPosition, CellData data)
         {
             if(cells.ContainsKey(cellPosition))
             {
@@ -105,9 +105,9 @@ public class SkillTreeData : IData
     public struct CellData
     {
         public CellType cellType;
-        public List<Vector2> connectedCells;
+        public List<SimplePosition> connectedCells;
 
-        public CellData(CellType type, List<Vector2> connecteds = null)
+        public CellData(CellType type, List<SimplePosition> connecteds = null)
         {
             connecteds ??= new();
             
@@ -154,9 +154,9 @@ public class SkillTreeData : IData
     [Serializable]
     public struct BranchCell : IBranchData
     {
-        public Vector2 cellPosition;
+        public SimplePosition cellPosition;
 
-        public BranchCell(Vector2 position)
+        public BranchCell(SimplePosition position)
         {
             cellPosition = position;
         }
@@ -165,10 +165,10 @@ public class SkillTreeData : IData
     [Serializable]
     public struct BranchTrigger : IBranchData
     {
-        public Vector2 cellPosition;
+        public SimplePosition cellPosition;
         public List<IBranchData> connected;
 
-        public BranchTrigger(Vector2 position)
+        public BranchTrigger(SimplePosition position)
         {
             cellPosition = position;
             connected = new();
@@ -184,11 +184,11 @@ public class SkillTreeData : IData
     [Serializable]
     public struct BranchSwitch : IBranchData
     {
-        public Vector2 cellPosition;
+        public SimplePosition cellPosition;
         public List<IBranchData> connectedTrue;
         public List<IBranchData> connectedFalse;
 
-        public BranchSwitch(Vector2 position)
+        public BranchSwitch(SimplePosition position)
         {
             cellPosition = position;
             connectedTrue = new();

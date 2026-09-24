@@ -25,7 +25,7 @@ public class CellButton : CustomButton
 
         _cellData.connectedCells.ForEach(cellPosition =>
         {
-            var distance = cellPosition - _cellPosition;
+            var distance = cellPosition.ConvertVector() - _cellPosition;
             var joint = CreateConnecter(transform, new Vector2(distance.x, 0), (int)distance.x);
             CreateConnecter(joint, new Vector2(0, distance.y), (int)distance.y);
         });
@@ -33,7 +33,7 @@ public class CellButton : CustomButton
 
     void Update()
     {
-        if(_skillTreeData.TreeDatas[_treeId].unlocked.Contains(_cellPosition))
+        if(_skillTreeData.TreeDatas[_treeId].unlocked.Contains(new(_cellPosition)))
         {
             DisablePress();
         }
@@ -68,21 +68,21 @@ public class CellButton : CustomButton
 
     protected override void OnClick()
     {
-        _onClicked?.Invoke(_cellPosition, _cellData);
+        _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(int treeId, Vector2 pos, SkillTreeData.CellData data)
+    public void Initialize(int treeId, SimplePosition pos, SkillTreeData.CellData data)
     {
         _treeId = treeId;
-        _cellPosition = pos;
+        _cellPosition = pos.ConvertVector();
         _cellData = data;
     }
 
-    public void AddClickAction(Action<Vector2, SkillTreeData.CellData> action)
+    public void AddClickAction(Action<SimplePosition, SkillTreeData.CellData> action)
     {
         _onClicked.AddListener(new(action));
     }
 }
 
 [Serializable]
-public class CellButtonEvent : UnityEvent<Vector2, SkillTreeData.CellData>{}
+public class CellButtonEvent : UnityEvent<SimplePosition, SkillTreeData.CellData>{}

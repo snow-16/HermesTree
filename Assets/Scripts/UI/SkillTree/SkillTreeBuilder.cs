@@ -34,12 +34,12 @@ public class SkillTreeBuilder : MonoBehaviour
         _treeBuilder?.SetName("Test");
     }
 
-    public void AddCell(Vector2 cellPosition, SkillTreeData.CellData cellData)
+    public void AddCell(SimplePosition cellPosition, SkillTreeData.CellData cellData)
     {
         _treeBuilder?.AddCell(cellPosition, cellData);
     }
 
-    public void UnlockCell(Vector2 cellPosition, SkillTreeData.CellData cellData)
+    public void UnlockCell(SimplePosition cellPosition, SkillTreeData.CellData cellData)
     {
         _treeBuilder?.AddUnlocked(cellPosition);
     }
