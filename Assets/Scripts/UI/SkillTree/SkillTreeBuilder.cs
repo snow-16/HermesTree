@@ -61,7 +61,7 @@ public class SkillTreeBuilder : MonoBehaviour
     {
         var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
         cellBuilder.AddClickAction(action);
-        cellBuilder.Initialize(id, cellPosition, cellData, _connectersPerent);
+        cellBuilder.Initialize(_treeBuilder.HasValue, id, cellPosition, cellData, _connectersPerent);
         cellBuilder.transform.SetParent(_cellsPerent);
     }
 

@@ -9,6 +9,7 @@ public class CellButton : CustomButton
     [SerializeField]
     private GameObject _cellConnecterPrefab;
 
+    private bool _isTreeBuilding;
     private int _treeId;
     private Vector2 _cellPosition;
     private SkillTreeData.CellData _cellData;
@@ -34,13 +35,32 @@ public class CellButton : CustomButton
 
     void Update()
     {
-        if(_skillTreeData.TreeDatas[_treeId].unlocked.Contains(new(_cellPosition)))
+        if(_isTreeBuilding)
         {
-            DisablePress();
-        }
-        else
-        {
-            EnablePress();
+            var isUnlocked = _skillTreeData.IsCellUnlocked(_treeId, new(_cellPosition));
+            var isUnlockable = _skillTreeData.IsCellUnlocked(_treeId, _cellData.connectFrom);
+
+            if(isUnlocked || !isUnlockable)
+            {
+                DisablePress();
+            }
+            else
+            {
+                EnablePress();
+            }
+
+            if(isUnlocked)
+            {
+                ChangeColorSet(1);
+            }
+            else if(isUnlockable)
+            {
+                ChangeColorSet(3);
+            }
+            else
+            {
+                ChangeColorSet(2);
+            }
         }
     }
 
@@ -63,8 +83,9 @@ public class CellButton : CustomButton
         _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(int treeId, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
+    public void Initialize(bool isTreeBuilding, int treeId, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
     {
+        _isTreeBuilding = isTreeBuilding;
         _treeId = treeId;
         _cellPosition = pos.ConvertVector();
         _cellData = data;

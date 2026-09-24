@@ -1,7 +1,12 @@
 {
   "id": 0,
   "name": "NormalBulletBase",
-  "unlocked": [],
+  "unlocked": [
+    {
+      "x": 0,
+      "y": 0
+    }
+  ],
   "cells": {
     "(0, 0)": {
       "cellType": 0,

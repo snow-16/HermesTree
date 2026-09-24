@@ -49,6 +49,11 @@ public class SkillTreeData : IData
         _chartDatas.Remove(id);
     }
 
+    public bool IsCellUnlocked(int treeId, SimplePosition cellPosition)
+    {
+        return TreeDatas[treeId].unlocked.Contains(cellPosition);
+    }
+
     [Serializable]
     public struct TreeData
     {
