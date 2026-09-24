@@ -70,6 +70,11 @@ public static class InputObserver
         SwitchEnabled(enabled, _inputMap.Player.Get());
     }
 
+    public static void SwitchUIEnabled(bool enabled)
+    {
+        SwitchEnabled(enabled, _inputMap.UI.Get());
+    }
+
     private static void SwitchEnabled(bool enabled, InputActionMap map)
     {
         if(enabled)
