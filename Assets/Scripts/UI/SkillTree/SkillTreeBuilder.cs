@@ -75,8 +75,13 @@ public class SkillTreeBuilder : MonoBehaviour
         _treeBuilder?.AddUnlocked(cellPosition);
     }
 
-    public void SetTree()
+    public void Save()
     {
+        if(string.IsNullOrEmpty(_treeNameField.text))
+        {
+            Debug.LogError("名前を入力してください。");
+        }
+
         if(_treeBuilder != null)
         {
             _treeBuilder = _treeBuilder?.SetName(_treeNameField.text);
@@ -86,7 +91,7 @@ public class SkillTreeBuilder : MonoBehaviour
         }
         else
         {
-            Debug.LogError("スキルツリーが開かれていません。");
+            
         }
     }
 
