@@ -10,7 +10,8 @@ public class CellButton : CustomButton
     private GameObject _cellConnecterPrefab;
 
     private bool _isTreeBuilding;
-    private SkillTreeData.TreeData _perentTree;
+    private SkillTreeData.TreeData _treeData;
+    private SkillTreeData.ChartData _chartData;
     private Vector2 _cellPosition;
     private SkillTreeData.CellData _cellData;
     private Transform _connectersPerent;
@@ -37,30 +38,72 @@ public class CellButton : CustomButton
     {
         if(_isTreeBuilding)
         {
-            var isUnlocked = _perentTree.IsCellUnlocked(new(_cellPosition));
-            var isUnlockable = _perentTree.IsCellUnlocked(_cellData.connectFrom);
+            UpdateTreeBuild();
+        }
+        else
+        {
+            UpdateChartBuild();
+        }
+    }
 
-            if(isUnlocked || !isUnlockable)
-            {
-                DisablePress();
-            }
-            else
-            {
-                EnablePress();
-            }
+    private void UpdateTreeBuild()
+    {
+        var isUnlocked = _treeData.IsCellUnlocked(new(_cellPosition));
+        var isUnlockable = _treeData.IsCellUnlocked(_cellData.connectFrom);
 
-            if(isUnlocked)
-            {
-                ChangeColorSet(1);
-            }
-            else if(isUnlockable)
-            {
-                ChangeColorSet(3);
-            }
-            else
-            {
-                ChangeColorSet(2);
-            }
+        if(isUnlocked || !isUnlockable)
+        {
+            DisablePress();
+        }
+        else
+        {
+            EnablePress();
+        }
+
+        if(isUnlocked)
+        {
+            ChangeColorSet(1);
+        }
+        else if(isUnlockable)
+        {
+            ChangeColorSet(3);
+        }
+        else
+        {
+            ChangeColorSet(2);
+        }
+    }
+
+    private void UpdateChartBuild()
+    {
+        var isSelected = _chartData.allSelecteds.Contains(new(_cellPosition));
+        var isUnlocked = _treeData.IsCellUnlocked(new(_cellPosition));
+        var isSelectable = _chartData.CanSelecting(new(_cellPosition));
+
+        if(!isSelectable)
+        {
+            DisablePress();
+        }
+        else
+        {
+            EnablePress();
+        }
+
+        if(isSelected)
+        {
+            ChangeColorSet(1);
+        }
+        else if(isSelectable)
+        {
+            ChangeColorSet(3);
+        }
+        else if(isUnlocked)
+        {
+            ChangeColorSet(4);
+        }
+        else
+        {
+            ChangeColorSet(2);
         }
     }
 
@@ -83,10 +126,11 @@ public class CellButton : CustomButton
         _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(bool isTreeBuilding, SkillTreeData.TreeData perentTree, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
+    public void Initialize(bool isTreeBuilding, SkillTreeData.TreeData treeData, SkillTreeData.ChartData chartData, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
     {
         _isTreeBuilding = isTreeBuilding;
-        _perentTree = perentTree;
+        _treeData = treeData;
+        _chartData = chartData;
         _cellPosition = pos.ConvertVector();
         _cellData = data;
         _connectersPerent = connectersPerent;

@@ -38,7 +38,7 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _treeBuilder.name;
-            OpenTree(_treeBuilder);
+            OpenTree(_treeBuilder, UnlockCell);
         }
         else
         {
@@ -54,15 +54,15 @@ public class SkillTreeBuilder : MonoBehaviour
             }
 
             _treeNameField.text = _chartBuilder.name;
-            OpenTree(_skillTreeData.TreeDatas[_chartBuilder.perentTreeId]);
+            OpenTree(_skillTreeData.TreeDatas[_chartBuilder.perentTreeId], SelectCell);
         }
     }
 
-    private void OpenTree(SkillTreeData.TreeData tree)
+    private void OpenTree(SkillTreeData.TreeData tree, Action<SimplePosition, SkillTreeData.CellData> action)
     {
         tree.cells.ToList().ForEach(cell =>
         {
-            BuildCell(tree, cell.Key, cell.Value, UnlockCell);
+            BuildCell(tree, cell.Key, cell.Value, action);
         });
     }
 
@@ -70,7 +70,7 @@ public class SkillTreeBuilder : MonoBehaviour
     {
         var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
         cellBuilder.AddClickAction(action);
-        cellBuilder.Initialize(_treeBuilder != null, tree, cellPosition, cellData, _connectersPerent);
+        cellBuilder.Initialize(_treeBuilder != null, tree, _chartBuilder, cellPosition, cellData, _connectersPerent);
         cellBuilder.transform.SetParent(_cellsPerent);
     }
 
@@ -82,6 +82,11 @@ public class SkillTreeBuilder : MonoBehaviour
     public void UnlockCell(SimplePosition cellPosition, SkillTreeData.CellData cellData)
     {
         _treeBuilder?.AddUnlocked(cellPosition);
+    }
+
+    public void SelectCell(SimplePosition cellPosition, SkillTreeData.CellData cellData)
+    {
+        _chartBuilder.AddCell(cellPosition, cellData);
     }
 
     public void Save()
@@ -96,11 +101,12 @@ public class SkillTreeBuilder : MonoBehaviour
             _treeBuilder = _treeBuilder?.SetName(_treeNameField.text);
             _skillTreeData.SetTree(_treeBuilder);
             SkillTreeFiler.WriteTree(_treeBuilder);
-            _treeBuilder = null;
         }
         else
         {
-            
+            _chartBuilder = _chartBuilder?.SetName(_treeNameField.text);
+            _skillTreeData.SetChart(_chartBuilder);
+            SkillTreeFiler.WriteChart(_chartBuilder);
         }
     }
 

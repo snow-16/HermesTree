@@ -159,6 +159,8 @@ public class SkillTreeData : IData
         public string name;
         public int perentTreeId;
         public List<IBranchData> selected;
+        public List<SimplePosition> allSelecteds;
+        public List<SelectableCells> canSelectings;
 
         public ChartData(int dataId)
         {
@@ -166,6 +168,8 @@ public class SkillTreeData : IData
             name = "";
             perentTreeId = default;
             selected = new();
+            allSelecteds = new();
+            canSelectings = new();
         }
 
         public ChartData SetName(string newName)
@@ -180,10 +184,47 @@ public class SkillTreeData : IData
             return this;
         }
 
-        public ChartData AddCell(IBranchData cell)
+        public ChartData AddCell(SimplePosition cellPosition, CellData cell)
         {
-            selected.Add(cell);
+            canSelectings.ForEach(selectables => 
+            {
+                if(selectables.selectables.Contains(cellPosition))
+                {
+                    selectables.AddConnection();
+                }
+            });
+            canSelectings.RemoveAll(selectables => selectables.IsMaxSelected());
+
+            IBranchData branch;
+            var processor = DataManager.ReadData<CellDataBase>().CellList[cell.cellType].Processor;
+
+            if(processor is TriggerProcessor)
+            {
+                branch = new BranchTrigger(cellPosition);
+            }
+            else if(processor is SwitchProcessor)
+            {
+                branch = new BranchSwitch(cellPosition);
+            }
+            else
+            {
+                branch = new BranchCell(cellPosition);
+            }
+            
+            if(selected.Last().TryGetLastCell(cellPosition, branch) != null)
+            {
+                selected.Add(branch);
+            }
+
+            canSelectings.Add(new(cell.connectedCells, branch is SwitchProcessor));
+            allSelecteds.Add(cellPosition);
+
             return this;
+        }
+
+        public bool CanSelecting(SimplePosition cellPosition)
+        {
+            return canSelectings.Any(selectables => selectables.selectables.Contains(cellPosition));
         }
 
         public ChartData Clone()
@@ -192,8 +233,40 @@ public class SkillTreeData : IData
             {
                 name = new(name),
                 perentTreeId = perentTreeId,
-                selected = selected.Select(branch => branch.Clone()).ToList()
+                selected = selected.Select(branch => branch.Clone()).ToList(),
+                allSelecteds = new(allSelecteds),
+                canSelectings = canSelectings.Select(selectables => selectables.Clone()).ToList()
             };
+        }
+    }
+
+    [Serializable]
+    public struct SelectableCells
+    {
+        public List<SimplePosition> selectables;
+        private bool isBranchSwitch;
+        private int connectedCount;
+
+        public SelectableCells(List<SimplePosition> connected, bool isSwitch)
+        {
+            selectables = connected;
+            isBranchSwitch = isSwitch;
+            connectedCount = 0;
+        }
+
+        public void AddConnection()
+        {
+            connectedCount++;
+        }
+
+        public bool IsMaxSelected()
+        {
+            return connectedCount == (isBranchSwitch ? 2 : 1);
+        }
+
+        public SelectableCells Clone()
+        {
+            return new(new(selectables), isBranchSwitch);
         }
     }
 
@@ -208,6 +281,11 @@ public class SkillTreeData : IData
         }
 
         public IBranchData Clone()
+        {
+            return this;
+        }
+
+        public BranchCell? TryGetLastCell(SimplePosition cellPosition, IBranchData branch)
         {
             return this;
         }
@@ -237,6 +315,20 @@ public class SkillTreeData : IData
             {
                 connected = connected.Select(branch => branch.Clone()).ToList()
             };
+        }
+
+        public BranchCell? TryGetLastCell(SimplePosition cellPosition, IBranchData branch)
+        {
+            var lastBranch = connected.Last().TryGetLastCell(cellPosition, branch);
+            if(lastBranch.HasValue)
+            {
+                if(lastBranch.Value.cellPosition.Equals(cellPosition))
+                {
+                    connected.Add(branch);
+                }
+            }
+
+            return null;
         }
     }
 
@@ -276,10 +368,31 @@ public class SkillTreeData : IData
                 connectedFalse = connectedFalse.Select(branch => branch.Clone()).ToList()
             };
         }
+
+        public BranchCell? TryGetLastCell(SimplePosition cellPosition, IBranchData branch)
+        {
+            TryInsert(connectedTrue, cellPosition, branch);
+            TryInsert(connectedFalse, cellPosition, branch);
+
+            return null;
+        }
+
+        private void TryInsert(List<IBranchData> connected, SimplePosition cellPosition, IBranchData branch)
+        {
+            var lastBranch = connected.Last().TryGetLastCell(cellPosition, branch);
+            if(lastBranch.HasValue)
+            {
+                if(lastBranch.Value.cellPosition.Equals(cellPosition))
+                {
+                    connected.Add(branch);
+                }
+            }
+        }
     }
 
     public interface IBranchData
     {
         IBranchData Clone();
+        BranchCell? TryGetLastCell(SimplePosition cellPosition, IBranchData branch);
     }
 }

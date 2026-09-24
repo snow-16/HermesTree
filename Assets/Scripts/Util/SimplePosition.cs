@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public struct SimplePosition : IFormattable
+public struct SimplePosition : IEquatable<SimplePosition>, IFormattable
 {
     public int x;
     public int y;
@@ -27,5 +27,10 @@ public struct SimplePosition : IFormattable
     public string ToString(string format, IFormatProvider formatProvider)
     {
         return $"({x}, {y})";
+    }
+
+    public bool Equals(SimplePosition other)
+    {
+        return x == other.x && y == other.y;
     }
 }
