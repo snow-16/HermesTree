@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class SkillTreeReader
 {
@@ -17,7 +18,7 @@ public static class SkillTreeReader
         {
             if(branch is SkillTreeData.BranchCell cell)
             {
-                list.Add(cellList[tree.cells[cell.cellNumber].cellType].Processor);
+                list.Add(cellList[tree.cells[cell.cellPosition].cellType].Processor);
             }
         });
 

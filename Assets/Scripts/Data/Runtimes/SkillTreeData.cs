@@ -54,8 +54,8 @@ public class SkillTreeData : IData
     {
         public int id;
         public string name;
-        public List<int> unlocked;
-        public Dictionary<int, CellData> cells;
+        public List<Vector2> unlocked;
+        public Dictionary<Vector2, CellData> cells;
 
         public TreeData(int dataId)
         {
@@ -71,32 +71,32 @@ public class SkillTreeData : IData
             return this;
         }
 
-        public TreeData AddUnlocked(int cellNumber)
+        public TreeData AddUnlocked(Vector2 cellPosition)
         {
-            if(unlocked.Contains(cellNumber))
+            if(unlocked.Contains(cellPosition))
             {
-                Debug.LogError($"{name}の{cellNumber}番は解放済みです。");
+                Debug.LogError($"{name}の{cellPosition}番は解放済みです。");
                 return this;
             }
-            else if(!cells.ContainsKey(cellNumber))
+            else if(!cells.ContainsKey(cellPosition))
             {
-                Debug.LogError($"{name}の{cellNumber}番は未登録です。");
+                Debug.LogError($"{name}の{cellPosition}番は未登録です。");
                 return this;
             }
 
-            unlocked.Add(cellNumber);
+            unlocked.Add(cellPosition);
             return this;
         }
 
-        public TreeData AddCell(int cellNumber, CellData data)
+        public TreeData AddCell(Vector2 cellPosition, CellData data)
         {
-            if(cells.ContainsKey(cellNumber))
+            if(cells.ContainsKey(cellPosition))
             {
-                Debug.LogError($"{name}の{cellNumber}番は登録済みです。");
+                Debug.LogError($"{name}の{cellPosition}番は登録済みです。");
                 return this;
             }
 
-            cells.Add(cellNumber, data);
+            cells.Add(cellPosition, data);
             return this;
         }
     }
@@ -105,9 +105,9 @@ public class SkillTreeData : IData
     public struct CellData
     {
         public CellType cellType;
-        public List<int> connectedCells;
+        public List<Vector2> connectedCells;
 
-        public CellData(CellType type, List<int> connecteds = null)
+        public CellData(CellType type, List<Vector2> connecteds = null)
         {
             connecteds ??= new();
             
@@ -154,23 +154,23 @@ public class SkillTreeData : IData
     [Serializable]
     public struct BranchCell : IBranchData
     {
-        public int cellNumber;
+        public Vector2 cellPosition;
 
-        public BranchCell(int number)
+        public BranchCell(Vector2 position)
         {
-            cellNumber = number;
+            cellPosition = position;
         }
     }
 
     [Serializable]
     public struct BranchTrigger : IBranchData
     {
-        public int cellNumber;
+        public Vector2 cellPosition;
         public List<IBranchData> connected;
 
-        public BranchTrigger(int number)
+        public BranchTrigger(Vector2 position)
         {
-            cellNumber = number;
+            cellPosition = position;
             connected = new();
         }
 
@@ -184,13 +184,13 @@ public class SkillTreeData : IData
     [Serializable]
     public struct BranchSwitch : IBranchData
     {
-        public int cellNumber;
+        public Vector2 cellPosition;
         public List<IBranchData> connectedTrue;
         public List<IBranchData> connectedFalse;
 
-        public BranchSwitch(int number)
+        public BranchSwitch(Vector2 position)
         {
-            cellNumber = number;
+            cellPosition = position;
             connectedTrue = new();
             connectedFalse = new();
         }

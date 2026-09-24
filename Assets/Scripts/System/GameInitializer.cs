@@ -27,26 +27,28 @@ public class GameInitializer : MonoBehaviour
             _systemData.CheckingGamepad();
             InputSystem.onDeviceChange += _systemData.OnDeviceChanged;
 
-            var testTree = new SkillTreeData.TreeData(0)
-            .SetName("Test")
-            .AddCell(0, new(CellType.SpeedUp, new(){1}))
-            .AddCell(1, new(CellType.Reflection, new(){2}))
-            .AddCell(2, new(CellType.Gunpowder))
-            .AddUnlocked(0)
-            .AddUnlocked(1)
-            .AddUnlocked(2);
-            DataManager.ReadData<SkillTreeData>().SetTree(testTree);
+            ReadData();
 
-            var testChart = new SkillTreeData.ChartData(0)
-            .SetName("Test")
-            .SetPerentTree(testTree)
-            .AddCell(new SkillTreeData.BranchCell(0))
-            .AddCell(new SkillTreeData.BranchCell(1))
-            .AddCell(new SkillTreeData.BranchCell(2));
-            DataManager.ReadData<SkillTreeData>().SetChart(testChart);
+            // var testTree = new SkillTreeData.TreeData(0)
+            // .SetName("Test")
+            // .AddCell(0, new(CellType.SpeedUp, new(){1}))
+            // .AddCell(1, new(CellType.Reflection, new(){2}))
+            // .AddCell(2, new(CellType.Gunpowder))
+            // .AddUnlocked(0)
+            // .AddUnlocked(1)
+            // .AddUnlocked(2);
+            // DataManager.ReadData<SkillTreeData>().SetTree(testTree);
 
-            DataManager.ReadData<PlayerGunData>().AddMagazine(3);
-            DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
+            // var testChart = new SkillTreeData.ChartData(0)
+            // .SetName("Test")
+            // .SetPerentTree(testTree)
+            // .AddCell(new SkillTreeData.BranchCell(0))
+            // .AddCell(new SkillTreeData.BranchCell(1))
+            // .AddCell(new SkillTreeData.BranchCell(2));
+            // DataManager.ReadData<SkillTreeData>().SetChart(testChart);
+
+            // DataManager.ReadData<PlayerGunData>().AddMagazine(3);
+            // DataManager.ReadData<PlayerGunData>().SetMagazine(0, testChart, testChart, testChart);
         }
     }
 
@@ -67,5 +69,11 @@ public class GameInitializer : MonoBehaviour
         {
             DataManager.AddData((IData)Activator.CreateInstance(data));
         });
+    }
+
+    private void ReadData()
+    {
+        var skillTreeData = DataManager.ReadData<SkillTreeData>();
+        SkillTreeFiler.ReadTree().ForEach(tree => skillTreeData.SetTree(tree));
     }
 }
