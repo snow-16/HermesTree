@@ -149,6 +149,12 @@ public class ForgingMenuBuilder : MonoBehaviour
         _onOpenForge?.Invoke(_builder);
     }
 
+    public void CloseForge()
+    {
+        _forgeMenu.SetActive(false);
+        OpenBuilder();
+    }
+
     public void BackWindow()
     {
         _windowTransition.Last().SetActive(false);

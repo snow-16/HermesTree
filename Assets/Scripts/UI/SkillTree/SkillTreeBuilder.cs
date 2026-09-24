@@ -89,4 +89,20 @@ public class SkillTreeBuilder : MonoBehaviour
             Debug.LogError("スキルツリーが開かれていません。");
         }
     }
+
+    public void EndBuild()
+    {
+        _treeBuilder = null;
+        _chartBuilder = null;
+
+        foreach(Transform child in _cellsPerent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach(Transform child in _connectersPerent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }
