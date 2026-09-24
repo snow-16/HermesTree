@@ -16,14 +16,42 @@ public class CellButton : CustomButton
     [SerializeField]
     private GameObject _cellConnecterPrefab;
 
+    private SkillTreeDataBase _skillTreeDataBase;
+
     void Start()
     {
-        ((RectTransform)transform).anchoredPosition = _cellPosition * DataManager.ReadData<SkillTreeDataBase>().LayerMargin;
+        _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
+        ((RectTransform)transform).anchoredPosition = _cellPosition * _skillTreeDataBase.LayerMargin;
 
-        _connectedCells.ForEach(cellNumber =>
+        _connectedCells.ForEach(cellPosition =>
         {
-            
+            var distance = cellPosition - _cellPosition;
+            var joint = CreateConnecter(transform, new Vector2(distance.x, 0), (int)distance.x);
+            CreateConnecter(joint, new Vector2(0, distance.y), (int)distance.y);
         });
+    }
+
+    private Transform CreateConnecter(Transform joint, Vector2 direction, int length)
+    {
+        for(int i = 0; i < length; i++)
+        {
+            var connecter = Instantiate(_cellConnecterPrefab);
+            var rect = (RectTransform)connecter.transform;
+            rect.SetParent(joint);
+            rect.anchoredPosition = Vector2.zero;
+            var size = rect.sizeDelta;
+            size.x = _skillTreeDataBase.LayerMargin - ((RectTransform)transform).sizeDelta.x / 2;
+            rect.sizeDelta = size;
+
+            if(i == 0)
+            {
+                rect.rotation = Quaternion.FromToRotation(Vector2.right, direction);
+            }
+
+            joint = rect;
+        }
+
+        return joint;
     }
 
     protected override void OnClick()
