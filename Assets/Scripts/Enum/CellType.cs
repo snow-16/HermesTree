@@ -3,6 +3,7 @@
 /// </summary>
 public enum CellType
 {
+    Empty,
     SpeedUp,
     Reflection,
     Penetration,
