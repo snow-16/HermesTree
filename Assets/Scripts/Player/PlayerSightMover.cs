@@ -22,6 +22,11 @@ public class PlayerSightMover : MonoBehaviour
         _systemData = DataManager.ReadData<SystemData>();
     }
 
+    void OnDisable()
+    {
+        Cursor.visible = true;
+    }
+
     void LateUpdate()
     {
         Cursor.visible = false;
