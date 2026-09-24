@@ -5,6 +5,10 @@
   "cells": {
     "(0, 0)": {
       "cellType": 0,
+      "connectFrom": {
+        "x": 0,
+        "y": 0
+      },
       "connectedCells": [
         {
           "x": 0,
@@ -18,6 +22,10 @@
     },
     "(0, 1)": {
       "cellType": 0,
+      "connectFrom": {
+        "x": 0,
+        "y": 0
+      },
       "connectedCells": [
         {
           "x": 0,
@@ -31,14 +39,26 @@
     },
     "(0, 2)": {
       "cellType": 0,
+      "connectFrom": {
+        "x": 0,
+        "y": 1
+      },
       "connectedCells": []
     },
     "(1, 1)": {
       "cellType": 0,
+      "connectFrom": {
+        "x": 0,
+        "y": 0
+      },
       "connectedCells": []
     },
     "(-1, 2)": {
       "cellType": 0,
+      "connectFrom": {
+        "x": 0,
+        "y": 1
+      },
       "connectedCells": []
     }
   }

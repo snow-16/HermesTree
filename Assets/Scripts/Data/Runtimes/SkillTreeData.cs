@@ -111,6 +111,7 @@ public class SkillTreeData : IData
     public struct CellData
     {
         public CellType cellType;
+        public SimplePosition connectFrom;
         public List<SimplePosition> connectedCells;
 
         public CellData(CellType type, List<SimplePosition> connecteds = null)
@@ -118,6 +119,7 @@ public class SkillTreeData : IData
             connecteds ??= new();
             
             cellType = type;
+            connectFrom = new();
             connectedCells = connecteds;
         }
     }
