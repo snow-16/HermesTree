@@ -92,7 +92,7 @@ MonoBehaviour:
   - baseColor: {r: 1, g: 1, b: 1, a: 1}
     focusedColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
     pressedColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-  _pressedScaleOffset: {x: 0.1, y: 0.1}
+  _pressedScaleMultiplier: 0.9
   _onClicked:
     m_PersistentCalls:
       m_Calls:
