@@ -96,13 +96,13 @@ MonoBehaviour:
     focusedColor: {r: 1, g: 1, b: 1, a: 1}
     pressedColor: {r: 1, g: 1, b: 1, a: 1}
   - baseColor: {r: 1, g: 1, b: 1, a: 1}
-    focusedColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
+    focusedColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
     pressedColor: {r: 1, g: 1, b: 1, a: 1}
   - baseColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
-    focusedColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
+    focusedColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
   - baseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
-    focusedColor: {r: 0, g: 0, b: 0, a: 1}
+    focusedColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
   _pressedScaleMultiplier: 0.9
   _onClicked:

@@ -186,13 +186,14 @@ public class SkillTreeData : IData
 
         public ChartData AddCell(SimplePosition cellPosition, CellData cell)
         {
-            canSelectings.ForEach(selectables => 
+            canSelectings = canSelectings.Select(selectables => 
             {
                 if(selectables.selectables.Contains(cellPosition))
                 {
                     selectables.AddConnection();
                 }
-            });
+                return selectables;
+            }).ToList();
             canSelectings.RemoveAll(selectables => selectables.IsMaxSelected());
 
             IBranchData branch;
@@ -216,7 +217,7 @@ public class SkillTreeData : IData
                 selected.Add(branch);
             }
 
-            canSelectings.Add(new(cell.connectedCells, branch is SwitchProcessor));
+            canSelectings.Add(new(new(cell.connectedCells), branch is SwitchProcessor));
             allSelecteds.Add(cellPosition);
 
             return this;
@@ -245,7 +246,7 @@ public class SkillTreeData : IData
     {
         public List<SimplePosition> selectables;
         private bool isBranchSwitch;
-        private int connectedCount;
+        public int connectedCount;
 
         public SelectableCells(int x, int y)
         {
