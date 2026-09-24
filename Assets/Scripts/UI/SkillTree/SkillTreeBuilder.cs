@@ -5,6 +5,10 @@ public class SkillTreeBuilder : MonoBehaviour
 {
     [SerializeField]
     private GameObject _cellPrefab;
+    [SerializeField]
+    private Transform _cellsPerent;
+    [SerializeField]
+    private Transform _connectersPerent;
 
     private SkillTreeData.TreeData? _treeBuilder;
 
@@ -23,8 +27,8 @@ public class SkillTreeBuilder : MonoBehaviour
         {
             var cellBuilder = Instantiate(_cellPrefab).GetComponent<CellButton>();
             cellBuilder.AddClickAction(UnlockCell);
-            cellBuilder.Initialize(id, cell.Key, cell.Value);
-            cellBuilder.transform.SetParent(transform);
+            cellBuilder.Initialize(id, cell.Key, cell.Value, _connectersPerent);
+            cellBuilder.transform.SetParent(_cellsPerent);
         });
     }
 

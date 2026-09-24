@@ -12,6 +12,7 @@ public class CellButton : CustomButton
     private int _treeId;
     private Vector2 _cellPosition;
     private SkillTreeData.CellData _cellData;
+    private Transform _connectersPerent;
 
     private SkillTreeDataBase _skillTreeDataBase;
     private SkillTreeData _skillTreeData;
@@ -26,7 +27,7 @@ public class CellButton : CustomButton
         _cellData.connectedCells.ForEach(cellPosition =>
         {
             var distance = cellPosition.ConvertVector() - _cellPosition;
-            var joint = CreateConnecter(transform, new Vector2(distance.x, 0), (int)distance.x);
+            var joint = CreateConnecter(((RectTransform)transform).anchoredPosition, new Vector2(distance.x, 0), (int)distance.x);
             CreateConnecter(joint, new Vector2(0, distance.y), (int)distance.y);
         });
     }
@@ -43,27 +44,18 @@ public class CellButton : CustomButton
         }
     }
 
-    private Transform CreateConnecter(Transform joint, Vector2 direction, int length)
+    private Vector2 CreateConnecter(Vector2 startPoint, Vector2 direction, int length)
     {
-        for(int i = 0; i < length; i++)
-        {
-            var connecter = Instantiate(_cellConnecterPrefab);
-            var rect = (RectTransform)connecter.transform;
-            rect.SetParent(joint);
-            rect.anchoredPosition = Vector2.zero;
-            var size = rect.sizeDelta;
-            size.x = _skillTreeDataBase.LayerMargin - ((RectTransform)transform).sizeDelta.x / 2;
-            rect.sizeDelta = size;
+        var connecter = Instantiate(_cellConnecterPrefab);
+        connecter.transform.SetParent(_connectersPerent);
+        var rect = (RectTransform)connecter.transform;
+        rect.anchoredPosition = startPoint;
+        var size = rect.sizeDelta;
+        size.x = Mathf.Abs(_skillTreeDataBase.LayerMargin * length);
+        rect.sizeDelta = size;
+        rect.eulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 
-            if(i == 0)
-            {
-                rect.rotation = Quaternion.FromToRotation(Vector2.right, direction);
-            }
-
-            joint = rect;
-        }
-
-        return joint;
+        return startPoint + direction.normalized * rect.sizeDelta.x;
     }
 
     protected override void OnClick()
@@ -71,11 +63,12 @@ public class CellButton : CustomButton
         _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(int treeId, SimplePosition pos, SkillTreeData.CellData data)
+    public void Initialize(int treeId, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
     {
         _treeId = treeId;
         _cellPosition = pos.ConvertVector();
         _cellData = data;
+        _connectersPerent = connectersPerent;
     }
 
     public void AddClickAction(Action<SimplePosition, SkillTreeData.CellData> action)
