@@ -10,7 +10,7 @@ public class CellButton : CustomButton
     private GameObject _cellConnecterPrefab;
 
     private bool _isTreeBuilding;
-    private int _treeId;
+    private SkillTreeData.TreeData _perentTree;
     private Vector2 _cellPosition;
     private SkillTreeData.CellData _cellData;
     private Transform _connectersPerent;
@@ -37,8 +37,8 @@ public class CellButton : CustomButton
     {
         if(_isTreeBuilding)
         {
-            var isUnlocked = _skillTreeData.IsCellUnlocked(_treeId, new(_cellPosition));
-            var isUnlockable = _skillTreeData.IsCellUnlocked(_treeId, _cellData.connectFrom);
+            var isUnlocked = _perentTree.IsCellUnlocked(new(_cellPosition));
+            var isUnlockable = _perentTree.IsCellUnlocked(_cellData.connectFrom);
 
             if(isUnlocked || !isUnlockable)
             {
@@ -83,10 +83,10 @@ public class CellButton : CustomButton
         _onClicked?.Invoke(new(_cellPosition), _cellData);
     }
 
-    public void Initialize(bool isTreeBuilding, int treeId, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
+    public void Initialize(bool isTreeBuilding, SkillTreeData.TreeData perentTree, SimplePosition pos, SkillTreeData.CellData data, Transform connectersPerent)
     {
         _isTreeBuilding = isTreeBuilding;
-        _treeId = treeId;
+        _perentTree = perentTree;
         _cellPosition = pos.ConvertVector();
         _cellData = data;
         _connectersPerent = connectersPerent;

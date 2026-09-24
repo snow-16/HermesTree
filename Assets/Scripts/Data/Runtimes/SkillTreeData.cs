@@ -16,11 +16,15 @@ public class SkillTreeData : IData
         if(_treeDatas.ContainsKey(data.id))
         {
             _treeDatas[data.id] = data;
+            Debug.Log($"{data.id}番のツリーを保存しました。");
         }
         else
         {
             _treeDatas.Add(data.id, data);
+            Debug.Log($"{data.id}番のツリーを追加しました。");
         }
+
+        _treeDatas = _treeDatas.OrderBy(pair => pair.Key).ToList().ToDictionary(pair => pair.Key, pair => pair.Value);
     }
 
     public void SetChart(ChartData data)
@@ -28,11 +32,15 @@ public class SkillTreeData : IData
         if(_chartDatas.ContainsKey(data.id))
         {
             _chartDatas[data.id] = data;
+            Debug.Log($"{data.id}番のチャートを保存しました。");
         }
         else
         {
             _chartDatas.Add(data.id, data);
+            Debug.Log($"{data.id}番のチャートを追加しました。");
         }
+
+        _chartDatas = _chartDatas.OrderBy(pair => pair.Key).ToList().ToDictionary(pair => pair.Key, pair => pair.Value);
     }
 
     public void RemoveTree(int id)
@@ -49,13 +57,8 @@ public class SkillTreeData : IData
         _chartDatas.Remove(id);
     }
 
-    public bool IsCellUnlocked(int treeId, SimplePosition cellPosition)
-    {
-        return TreeDatas[treeId].unlocked.Contains(cellPosition);
-    }
-
     [Serializable]
-    public struct TreeData
+    public class TreeData
     {
         public int id;
         public string name;
@@ -110,6 +113,21 @@ public class SkillTreeData : IData
             cells.Add(cellPosition, data);
             return this;
         }
+
+        public bool IsCellUnlocked(SimplePosition cellPosition)
+        {
+            return unlocked.Contains(cellPosition);
+        }
+
+        public TreeData Clone()
+        {
+            return new TreeData(id)
+            {
+                name = new(name),
+                unlocked = new(unlocked),
+                cells = new(cells.ToDictionary(cell => cell.Key, cell => cell.Value.Clone()))
+            };
+        }
     }
 
     [Serializable]
@@ -119,18 +137,23 @@ public class SkillTreeData : IData
         public SimplePosition connectFrom;
         public List<SimplePosition> connectedCells;
 
-        public CellData(CellType type, List<SimplePosition> connecteds = null)
+        public CellData(CellType type, SimplePosition from, List<SimplePosition> connecteds = null)
         {
             connecteds ??= new();
             
             cellType = type;
-            connectFrom = new();
+            connectFrom = from;
             connectedCells = connecteds;
+        }
+
+        public CellData Clone()
+        {
+            return new CellData(cellType, connectFrom, new(connectedCells));
         }
     }
 
     [Serializable]
-    public struct ChartData
+    public class ChartData
     {
         public int id;
         public string name;
@@ -162,6 +185,16 @@ public class SkillTreeData : IData
             selected.Add(cell);
             return this;
         }
+
+        public ChartData Clone()
+        {
+            return new ChartData(id)
+            {
+                name = new(name),
+                perentTreeId = perentTreeId,
+                selected = selected.Select(branch => branch.Clone()).ToList()
+            };
+        }
     }
 
     [Serializable]
@@ -172,6 +205,11 @@ public class SkillTreeData : IData
         public BranchCell(SimplePosition position)
         {
             cellPosition = position;
+        }
+
+        public IBranchData Clone()
+        {
+            return this;
         }
     }
 
@@ -191,6 +229,14 @@ public class SkillTreeData : IData
         {
             connected.Add(cell);
             return this;
+        }
+
+        public IBranchData Clone()
+        {
+            return new BranchTrigger(cellPosition)
+            {
+                connected = connected.Select(branch => branch.Clone()).ToList()
+            };
         }
     }
 
@@ -221,7 +267,19 @@ public class SkillTreeData : IData
 
             return this;
         }
+
+        public IBranchData Clone()
+        {
+            return new BranchSwitch(cellPosition)
+            {
+                connectedTrue = connectedTrue.Select(branch => branch.Clone()).ToList(),
+                connectedFalse = connectedFalse.Select(branch => branch.Clone()).ToList()
+            };
+        }
     }
 
-    public interface IBranchData{}
+    public interface IBranchData
+    {
+        IBranchData Clone();
+    }
 }

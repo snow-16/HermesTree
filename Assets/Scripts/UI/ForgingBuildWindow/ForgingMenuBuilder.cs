@@ -122,27 +122,10 @@ public class ForgingMenuBuilder : MonoBehaviour
         if(_builder.isTree)
         {
             Debug.Log($"ID{_builder.treeId}番の{_builder.bulletType}用ツリー構築メニューを開きます。");
-
-            if(_builder.createNew)
-            {
-                var baseTree = SkillTreeFiler.ReadTreeFromText(_bulletDataBase.BulletList[_builder.bulletType].BaseTree.text);
-                var newTree = baseTree.SetId(_builder.treeId).SetName("NewTree");
-
-                _skillTreeData.SetTree(newTree);
-            }
         }
         else
         {
             Debug.Log($"ID{_builder.chartId}番の{_builder.treeId}番ツリー用チャート構築メニューを開きます。");
-
-            if(_builder.createNew)
-            {
-                var newChart = new SkillTreeData.ChartData(_builder.chartId)
-                .SetPerentTree(_skillTreeData.TreeDatas[_builder.treeId])
-                .SetName("NewChart");
-
-                _skillTreeData.SetChart(newChart);
-            }
         }
 
         _forgeMenu.SetActive(true);
