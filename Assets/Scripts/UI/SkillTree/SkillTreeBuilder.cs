@@ -42,10 +42,13 @@ public class SkillTreeBuilder : MonoBehaviour
         }
         else
         {
+            _treeBuilder = _skillTreeData.TreeDatas[builder.treeId];
+
             if(builder.createNew)
             {
                 _chartBuilder = new SkillTreeData.ChartData(builder.chartId)
                 .SetPerentTree(_skillTreeData.TreeDatas[builder.treeId])
+                .AddCell(new(Vector2.zero), _treeBuilder.cells[new(Vector2.zero)])
                 .SetName("NewChart");
             }
             else

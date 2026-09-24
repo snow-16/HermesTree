@@ -169,7 +169,7 @@ public class SkillTreeData : IData
             perentTreeId = default;
             selected = new();
             allSelecteds = new();
-            canSelectings = new();
+            canSelectings = new(){new(0, 0)};
         }
 
         public ChartData SetName(string newName)
@@ -211,7 +211,7 @@ public class SkillTreeData : IData
                 branch = new BranchCell(cellPosition);
             }
             
-            if(selected.Last().TryGetLastCell(cellPosition, branch) != null)
+            if(selected.Count > 0 && selected.Last().TryGetLastCell(cellPosition, branch) != null)
             {
                 selected.Add(branch);
             }
@@ -246,6 +246,13 @@ public class SkillTreeData : IData
         public List<SimplePosition> selectables;
         private bool isBranchSwitch;
         private int connectedCount;
+
+        public SelectableCells(int x, int y)
+        {
+            selectables = new(){new(x, y)};
+            isBranchSwitch = false;
+            connectedCount = 0;
+        }
 
         public SelectableCells(List<SimplePosition> connected, bool isSwitch)
         {
