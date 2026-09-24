@@ -27,6 +27,13 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
         _baseScale = ((RectTransform)transform).sizeDelta;
     }
 
+    void OnDisable()
+    {
+        _isFocused = false;
+        _isPressed = false;
+        DrawButton();
+    }
+
     protected abstract void OnClick();
 
     public void OnPointerClick(PointerEventData eventData)

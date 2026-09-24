@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,12 @@ public class SelectTreeButton : CustomButton
     protected override void OnClick()
     {
         _onClicked?.Invoke(_treeId);
+    }
+
+    public void SetTree(SkillTreeData.TreeData data)
+    {
+        _treeId = data.id;
+        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.name;
     }
 }
 

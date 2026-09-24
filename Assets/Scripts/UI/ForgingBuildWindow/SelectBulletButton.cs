@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 public class SelectBulletButton : CustomButton
 {
@@ -12,6 +13,12 @@ public class SelectBulletButton : CustomButton
     protected override void OnClick()
     {
         _onClicked?.Invoke(_bulletType);
+    }
+
+    public void SetType(BulletType type)
+    {
+        _bulletType = type;
+        transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = type.ToString();
     }
 }
 
