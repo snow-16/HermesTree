@@ -18,7 +18,7 @@ public class CellButton : CustomButton
 
     void Start()
     {
-        ((RectTransform)transform).anchoredPosition = _cellPosition * 100;
+        ((RectTransform)transform).anchoredPosition = _cellPosition * DataManager.ReadData<SkillTreeDataBase>().LayerMargin;
 
         _connectedCells.ForEach(cellNumber =>
         {
