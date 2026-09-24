@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 public static class SkillTreeFiler
 {
+    private static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings()
+    {
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+        Converters = new List<JsonConverter>(){new Vector2KeyConverter()}
+    };
+    
     public static void WriteTree(SkillTreeData.TreeData data)
     {
         var saveDirectory = Path.Combine(Application.persistentDataPath, "Tree");
@@ -14,12 +20,7 @@ public static class SkillTreeFiler
             Directory.CreateDirectory(saveDirectory);
         }
 
-        var settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-
-        var json = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+        var json = JsonConvert.SerializeObject(data, Formatting.Indented, _serializerSettings);
         string filePath = Path.Combine(saveDirectory, $"{data.name}.json");
         File.WriteAllText(filePath, json);
         Debug.Log($"{filePath}に{data.name}をスキルツリーファイルとして保存しました。");
@@ -37,7 +38,7 @@ public static class SkillTreeFiler
         return allTrees.ToList().Select(tree =>
         {
             var treeText = File.ReadAllText(tree);
-            var treeData = JsonConvert.DeserializeObject<SkillTreeData.TreeData>(treeText);
+            var treeData = JsonConvert.DeserializeObject<SkillTreeData.TreeData>(treeText, _serializerSettings);
             Debug.Log($"{tree}から{treeData.name}をスキルツリーファイルとしてロードしました。");
             return treeData;
         }).ToList();
