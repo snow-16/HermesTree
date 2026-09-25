@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288527d659f5648238660cb0091d8205, type: 3}
   m_Name: Penetration
   m_EditorClassIdentifier: Assembly-CSharp::CellSettingData
-  _name: SpeedUp
+  _name: Penetration
+  _image: {fileID: 21300000, guid: 0084c4a3bd0094f5294334693eb5cd7f, type: 3}
   _processor:
     rid: 6838593417118221127
+  _text: 
   references:
     version: 2
     RefIds:

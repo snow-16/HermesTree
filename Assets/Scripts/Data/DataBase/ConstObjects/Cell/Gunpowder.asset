@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288527d659f5648238660cb0091d8205, type: 3}
   m_Name: Gunpowder
   m_EditorClassIdentifier: Assembly-CSharp::CellSettingData
-  _name: SpeedUp
+  _name: Gunpowder
+  _image: {fileID: 21300000, guid: ae2351e2f222d4469959815867651968, type: 3}
   _processor:
     rid: 6838593417118221152
+  _text: 
   references:
     version: 2
     RefIds:
