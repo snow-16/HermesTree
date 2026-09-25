@@ -14,6 +14,7 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
 
     private int _colorSelected;
     private Vector2 _baseScale;
+    private Sprite _baseImage;
     protected bool _isFocused;
     protected bool _isPressed;
     private bool _canPressing = true;
@@ -25,6 +26,7 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     {
         _buttonImage = GetComponent<Image>();
         _baseScale = ((RectTransform)transform).sizeDelta;
+        _baseImage = _buttonImage.sprite;
     }
 
     void OnDisable()
@@ -75,6 +77,9 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
         {
             _buttonImage.sprite = _colorSets[_colorSelected].image;
         }
+        {
+            _buttonImage.sprite = _baseImage;
+        }
 
         if(!_canPressing)
         {
@@ -98,6 +103,11 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     protected void ChangeColorSet(int index)
     {
         _colorSelected = index;
+    }
+
+    protected void ChangeBaseSprite(Sprite sprite)
+    {
+        _baseImage = sprite;
     }
 
     public void EnablePress()

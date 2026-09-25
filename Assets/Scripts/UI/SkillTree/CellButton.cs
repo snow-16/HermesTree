@@ -17,14 +17,17 @@ public class CellButton : CustomButton
     private Transform _connectersPerent;
 
     private SkillTreeDataBase _skillTreeDataBase;
+    private CellDataBase _cellDataBase;
     private SkillTreeData _skillTreeData;
 
     void Start()
     {
         _skillTreeDataBase = DataManager.ReadData<SkillTreeDataBase>();
+        _cellDataBase = DataManager.ReadData<CellDataBase>();
         _skillTreeData = DataManager.ReadData<SkillTreeData>();
 
         ((RectTransform)transform).anchoredPosition = _cellPosition * _skillTreeDataBase.LayerMargin;
+        ChangeBaseSprite(_cellDataBase.CellList[_cellData.cellType].Image);
 
         _cellData.connectedCells.ForEach(cellPosition =>
         {
