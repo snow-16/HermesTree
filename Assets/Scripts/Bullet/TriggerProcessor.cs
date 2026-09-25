@@ -11,4 +11,9 @@ public abstract class TriggerProcessor : IBulletProcessor
         bulletData.ReFillProcessor(_connectedProcessors);
         return bulletData;
     }
+
+    public void SetConnecteds(List<IBulletProcessor> connected)
+    {
+        _connectedProcessors = connected;
+    }
 }

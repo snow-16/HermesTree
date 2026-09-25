@@ -22,6 +22,10 @@
         {
           "x": 1,
           "y": 1
+        },
+        {
+          "x": -1,
+          "y": 0
         }
       ]
     },
@@ -56,12 +60,58 @@
         "x": 0,
         "y": 0
       },
-      "connectedCells": []
+      "connectedCells": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        }
+      ]
     },
     "(-1, 2)": {
       "cellType": 3,
       "connectFrom": {
         "x": 0,
+        "y": 1
+      },
+      "connectedCells": []
+    },
+    "(-1, 0)": {
+      "cellType": 1,
+      "connectFrom": {
+        "x": 0,
+        "y": 0
+      },
+      "connectedCells": [
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    },
+    "(-1, -1)": {
+      "cellType": 4,
+      "connectFrom": {
+        "x": -1,
+        "y": 0
+      },
+      "connectedCells": []
+    },
+    "(2, 1)": {
+      "cellType": 2,
+      "connectFrom": {
+        "x": 1,
+        "y": 1
+      },
+      "connectedCells": []
+    },
+    "(1, 2)": {
+      "cellType": 3,
+      "connectFrom": {
+        "x": 1,
         "y": 1
       },
       "connectedCells": []
