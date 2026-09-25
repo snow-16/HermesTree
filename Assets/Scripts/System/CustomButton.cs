@@ -71,6 +71,11 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
 
     private void DrawButton()
     {
+        if(_colorSets[_colorSelected].image)
+        {
+            _buttonImage.sprite = _colorSets[_colorSelected].image;
+        }
+
         if(!_canPressing)
         {
             ((RectTransform)transform).sizeDelta = _baseScale;
@@ -110,6 +115,7 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
     [Serializable]
     public struct ColorSet
     {
+        public Sprite image;
         public Color baseColor;
         public Color focusedColor;
         public Color pressedColor;
