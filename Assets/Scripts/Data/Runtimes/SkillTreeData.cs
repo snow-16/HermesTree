@@ -212,7 +212,7 @@ public class SkillTreeData : IData
                 branch = new BranchCell(cellPosition);
             }
             
-            if(selected.Count > 0 && selected.Last().TryGetLastCell(cellPosition, branch) != null)
+            if(selected.Count == 0 || selected.Last().TryGetLastCell(cellPosition, branch) != null)
             {
                 selected.Add(branch);
             }
