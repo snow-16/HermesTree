@@ -9,7 +9,8 @@ public static class SkillTreeFiler
     private static readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings()
     {
         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        Converters = new List<JsonConverter>(){new Position2KeyConverter()}
+        Converters = new List<JsonConverter>(){new Position2KeyConverter()},
+        TypeNameHandling = TypeNameHandling.Auto
     };
     
     public static void WriteTree(SkillTreeData.TreeData data)
