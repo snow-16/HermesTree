@@ -89,19 +89,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _colorSets:
-  - baseColor: {r: 1, g: 1, b: 1, a: 1}
+  - image: {fileID: 0}
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
     focusedColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
     pressedColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-  - baseColor: {r: 1, g: 1, b: 1, a: 1}
+  - image: {fileID: 0}
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
     focusedColor: {r: 1, g: 1, b: 1, a: 1}
     pressedColor: {r: 1, g: 1, b: 1, a: 1}
-  - baseColor: {r: 1, g: 1, b: 1, a: 1}
+  - image: {fileID: 0}
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
     focusedColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
     pressedColor: {r: 1, g: 1, b: 1, a: 1}
-  - baseColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
+  - image: {fileID: 0}
+    baseColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
     focusedColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
-  - baseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
+  - image: {fileID: 21300000, guid: e5877547bb1e74a26a1c94706d75ca04, type: 3}
+    baseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
     focusedColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
   _pressedScaleMultiplier: 0.9
