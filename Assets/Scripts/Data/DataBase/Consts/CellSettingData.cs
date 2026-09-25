@@ -7,7 +7,15 @@ public class CellSettingData : DataBase
     private string _name;
     public string Name => _name;
 
+    [SerializeField]
+    private Sprite _image;
+    public Sprite Image => _image;
+
     [SerializeReference, SubclassSelector]
     private IBulletProcessor _processor;
     public IBulletProcessor Processor => _processor;
+
+    [SerializeField]
+    private string _text;
+    public string Text => new(_text);
 }
