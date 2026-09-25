@@ -107,7 +107,7 @@ MonoBehaviour:
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
   - image: {fileID: 21300000, guid: e5877547bb1e74a26a1c94706d75ca04, type: 3}
     baseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
-    focusedColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    focusedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
     pressedColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
   _pressedScaleMultiplier: 0.9
   _onClicked:

@@ -77,7 +77,7 @@ IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandl
         {
             _buttonImage.sprite = _colorSets[_colorSelected].image;
         }
-        {
+        else {
             _buttonImage.sprite = _baseImage;
         }
 
