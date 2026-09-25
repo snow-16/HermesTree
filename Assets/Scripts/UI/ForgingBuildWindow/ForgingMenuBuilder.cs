@@ -9,6 +9,8 @@ public class ForgingMenuBuilder : MonoBehaviour
     [SerializeField]
     private OpenForgeMenuEvent _onOpenForge;
     [SerializeField]
+    private OpenForgeMenuEvent _onOpenMagazine;
+    [SerializeField]
     private GameObject _forgeMenu;
     [SerializeField]
     private GameObject _mainWindow;
@@ -66,10 +68,11 @@ public class ForgingMenuBuilder : MonoBehaviour
     public void BuildMagazine()
     {
         _builder.menuType = ForgeType.Magazine;
-        _builder.magazine = new SkillTreeData.ChartData[3];
+        _builder.magazine = new SkillTreeData.ChartData[_playerGunData.MagazineBases[0].bullets.Count()];
         _builder.magazineCaseIndex = 0;
 
         SwitchWindow(_fillMagazineWindow);
+        _onOpenMagazine?.Invoke(_builder);
     }
 
     public void NewTree()

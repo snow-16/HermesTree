@@ -35,7 +35,7 @@ public class PlayerGunData : IData
 
     public void AddMagazine(int addend)
     {
-        _magazineBases.AddRange(Enumerable.Repeat(new MagazineData(true), addend));
+        _magazineBases.AddRange(Enumerable.Repeat(new MagazineData(3), addend));
     }
 
     public void SetMagazine(int magazineNum, params SkillTreeData.ChartData[] bullet)
@@ -71,9 +71,9 @@ public class PlayerGunData : IData
     {
         public List<SkillTreeData.ChartData> bullets;
 
-        public MagazineData(bool dummy)
+        public MagazineData(int size)
         {
-            bullets = new();
+            bullets = new(new SkillTreeData.ChartData[size]);
         }
 
         public MagazineData Clone()

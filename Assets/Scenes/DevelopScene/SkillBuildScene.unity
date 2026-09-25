@@ -239,11 +239,61 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 275773437}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CreateMagazineBuilder, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123025595308712185, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      propertyPath: _onOpenMagazine.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3299171460283572848, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 275773437}
   m_SourcePrefab: {fileID: 100100000, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+--- !u!1 &275773435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3299171460283572848, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+  m_PrefabInstance: {fileID: 275773434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &275773436 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6959626225454936034, guid: 9814cd32acd3945499eecc06161f59e3, type: 3}
+  m_PrefabInstance: {fileID: 275773434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &275773437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275773435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b874b649acaa5490b9728086d95d02f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreateMagazineBuilder
+  _magazineButtonPerent: {fileID: 275773436}
 --- !u!1001 &468623116
 PrefabInstance:
   m_ObjectHideFlags: 0
